@@ -1,10 +1,11 @@
-[gd_scene load_steps=11 format=1]
+[gd_scene load_steps=12 format=1]
 
 [ext_resource path="res://assets/tilesets/black/angle.png" type="Texture" id=1]
 [ext_resource path="res://assets/tilesets/black/halfangle.png" type="Texture" id=2]
 [ext_resource path="res://assets/tilesets/black/halfsquare.png" type="Texture" id=3]
 [ext_resource path="res://assets/tilesets/black/raisedangle.png" type="Texture" id=4]
 [ext_resource path="res://assets/tilesets/black/square.png" type="Texture" id=5]
+[ext_resource path="res://assets/tilesets/black/vine.png" type="Texture" id=6]
 
 [sub_resource type="ConvexPolygonShape2D" id=1]
 
@@ -157,5 +158,10 @@ build_mode = 0
 polygon = Vector2Array( -32, -32, 32, -32, 32, 32, -32, 32 )
 shape_range = Vector2( 0, 0 )
 trigger = false
+
+[node name="Sprite6" type="Sprite" parent="."]
+
+transform/pos = Vector2( 672, 32 )
+texture = ExtResource( 6 )
 
 
