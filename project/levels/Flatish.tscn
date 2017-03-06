@@ -1,0 +1,35 @@
+[gd_scene load_steps=4 format=1]
+
+[ext_resource path="res://assets/tilesets/black/black.tres" type="TileSet" id=1]
+[ext_resource path="res://prefabs/player/player.tscn" type="PackedScene" id=2]
+[ext_resource path="res://prefabs/screecher/screecher.tscn" type="PackedScene" id=3]
+
+[node name="World" type="Node"]
+
+[node name="TileMap" type="TileMap" parent="."]
+
+mode = 0
+tile_set = ExtResource( 1 )
+cell/size = Vector2( 64, 64 )
+cell/quadrant_size = 16
+cell/custom_transform = Matrix32( 1, 0, 0, 1, 0, 0 )
+cell/half_offset = 2
+cell/tile_origin = 0
+cell/y_sort = false
+collision/use_kinematic = false
+collision/friction = 1.0
+collision/bounce = 0.0
+collision/layers = 3
+collision/mask = 3
+occluder/light_mask = 1
+tile_data = IntArray( -196556, 0, -196555, 4, -196554, 4, -196553, 4, -196552, 4, -196551, 4, -196550, 4, -196549, 4, -131021, 0, -65486, 0, 49, 0, 65584, 0, 131119, 0, 196633, 1, 196634, 2, 196635, 2, 196636, 2, 196637, 2, 196638, 2, 196639, 2, 196640, 2, 196641, 2, 196642, 2, 196643, 2, 196644, 2, 196645, 2, 196646, 2, 196647, 2, 196648, 2, 196649, 2, 196650, 2, 196651, 3, 196652, 4, 196653, 4, 196654, 4, 196655, 4, 262167, 1, 262168, 3, 262169, 1610612739, 262170, 1610612737, 327701, 1, 327702, 3, 327703, 1610612739, 327704, 1610612737, 393235, 1, 393236, 3, 393237, 1610612739, 393238, 1610612737, 458769, 1, 458770, 3, 458771, 1610612739, 458772, 1610612737, 589815, 1, 589816, 2, 589817, 2, 589818, 2, 589819, 2, 589820, 2, 589821, 2, 589822, 2, 589823, 2, 524288, 2, 524289, 2, 524290, 2, 524291, 2, 524292, 2, 524293, 2, 524294, 2, 524295, 2, 524296, 2, 524297, 2, 524298, 2, 524299, 2, 524300, 2, 524301, 2, 524302, 2, 524303, 2, 524304, 3, 524305, 1610612739, 524306, 1610612737, 655349, 1, 655350, 3, 720883, 1, 720884, 3, 786392, 2, 786393, 2, 786394, 2, 786395, 2, 786396, 2, 786397, 2, 786398, 2, 786399, 2, 786400, 2, 786401, 2, 786402, 2, 786403, 2, 786404, 2, 786405, 2, 786406, 2, 786407, 2, 786408, 2, 786409, 2, 786410, 2, 786411, 2, 786412, 2, 786413, 2, 786414, 2, 786415, 2, 786416, 2, 786417, 2, 786418, 3 )
+
+[node name="Player" parent="." instance=ExtResource( 2 )]
+
+transform/pos = Vector2( 832, 448 )
+
+[node name="Screecher" parent="." instance=ExtResource( 3 )]
+
+transform/pos = Vector2( -1504, 544 )
+
+

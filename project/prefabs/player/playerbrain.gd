@@ -6,6 +6,7 @@ const BASE_SPEED = 250 #Base speed of the player
 const JUMP_SPEED = 400 #Speed of jumps
 const CLIMB_SPEED = 250 #Speed of climbing
 
+#Both of these effect climbing inclines
 const SLOPE_SLIDE_STOP = 35.0 #When you stop on inclines, high is more stop, low is less
 	#Dont set hight than 35
 const LERP_INCREMENT = .2 #Increase for slightly faster responce, but less predictable and smooth movement
@@ -39,7 +40,7 @@ func _ready():
 	crouch_col.set_radius(31)
 	
 	normal_spr = get_node("Sprite").get_texture()
-	crouch_spr = preload("res://assets/textures/player_crouch.png")
+	crouch_spr = preload("res://assets/textures/player/player_crouch.png")
 	
 func _fixed_process(delta):
 	if state == STATE_STAND:
