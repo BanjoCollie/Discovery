@@ -6,12 +6,11 @@
 [sub_resource type="CapsuleShape2D" id=1]
 
 custom_solver_bias = 0.0
-radius = 31.0
-height = 64.0
+radius = 23.0
+height = 48.0
 
 [node name="Player" type="KinematicBody2D"]
 
-transform/pos = Vector2( 84.4698, 82.5566 )
 z/z = 1
 input/pickable = false
 shapes/0/shape = SubResource( 1 )
@@ -57,7 +56,7 @@ drag_margin/bottom = 0.2
 transform/pos = Vector2( 0, 32 )
 enabled = true
 exclude_parent = true
-cast_to = Vector2( 0, -96 )
+cast_to = Vector2( 0, -78 )
 layer_mask = 1
 type_mask = 15
 

@@ -37,7 +37,7 @@ func _ready():
 	normal_col = get_node("Collision").get_shape()
 	crouch_col = CapsuleShape2D.new()
 	crouch_col.set_height(0)
-	crouch_col.set_radius(31)
+	crouch_col.set_radius(23)
 	
 	normal_spr = get_node("Sprite").get_texture()
 	crouch_spr = preload("res://assets/textures/player/player_crouch.png")
@@ -207,9 +207,9 @@ func _fixed_process(delta):
 func switch_to_state(switch_to):
 	if switch_to == STATE_CROUCH:
 		get_node("Collision").set_shape(crouch_col)
-		get_node("Collision").set_pos(Vector2(0,32))
+		get_node("Collision").set_pos(Vector2(0,24))
 		get_node("Sprite").set_texture(crouch_spr)
-		get_node("Sprite").set_pos(Vector2(0,32))
+		get_node("Sprite").set_pos(Vector2(0,16))
 		state = STATE_CROUCH
 	elif switch_to == STATE_STAND:
 		if state == STATE_CROUCH:
