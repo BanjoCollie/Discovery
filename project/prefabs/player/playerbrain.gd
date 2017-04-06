@@ -10,6 +10,8 @@ const JUMP_SPEED = 400 #Speed of jumps
 const JUMP_DELAY = 0 #Time between jumps
 const CLIMB_SPEED = 250 #Speed of climbing
 const LEDGE_CLIMB_SPEED = 1 #How many seconds it takes to climb up a ledge
+const GUN_TRACER_TIME = 0.1 #How many seconds the gun's tracer is drawn
+const GUN_FIRE_DELAY = 1 #Length of time between gun shots
 
 #Both of these effect climbing inclines
 const SLOPE_SLIDE_STOP = 35.0 #When you stop on inclines, high is more stop, low is less
@@ -47,6 +49,9 @@ var ledge_climb_side = 0 #-1 is left, 1 is right
 var jump_time = 99
 	#Aiming
 var aimdir = 0
+var shot_hit = Vector2(0,0) #Where your last shot hit
+var gun_fire_timer = GUN_FIRE_DELAY
+var gun_tracer_timer = GUN_TRACER_TIME
 
 #Sprites and collisions
 var normal_col
@@ -301,8 +306,6 @@ func _fixed_process(delta):
 	
 	
 	elif state == STATE_AIM:
-		#var aimang = rad2deg(Vector2(0,-24).angle_to_point(get_global_mouse_pos()-Vector2(get_pos().x,get_pos().y-24)))
-		#aimdir = deg2rad(int(aimang)/int(45)*45)
 		
 		var hor = 0
 		var vert = 0
@@ -314,8 +317,13 @@ func _fixed_process(delta):
 			vert -= 1
 		if Input.is_action_pressed("aim_down"):
 			vert += 1
+			
+			#Free aiming (with snap)
+		var aimang = rad2deg(Vector2(0,-24).angle_to_point(get_global_mouse_pos()-Vector2(get_pos().x,get_pos().y-24)))
+		aimdir = deg2rad(round(aimang/45)*45)
 		
-		aimdir = Vector2(0,0).angle_to_point(Vector2(hor,vert))
+			#Non free aming
+		#aimdir = Vector2(0,0).angle_to_point(Vector2(hor,vert))
 		
 		velocity.y += GRAVITY*delta
 		#velocity.x = lerp(velocity.x,0,0.1)
@@ -326,9 +334,18 @@ func _fixed_process(delta):
 				direction += 1
 			if Input.is_action_pressed("move_left"):
 				direction -= 1
-			velocity.x = lerp(velocity.x, direction*AIM_SPEED, LERP_INCREMENT)
+			velocity.x = lerp(velocity.x, direction*AIM_SPEED, LERP_INCREMENT+.1)
 		
 		velocity = move_and_slide(velocity,FLOOR_NORM,SLOPE_SLIDE_STOP)
+		
+		#Firing
+		if Input.is_action_pressed("fire_gun") && gun_fire_timer>GUN_FIRE_DELAY:
+			shot_hit = Vector2(-1000*sin(aimdir),-1000*cos(aimdir)-24)
+			gun_fire_timer = 0
+			gun_tracer_timer = 0
+		
+		gun_fire_timer += delta
+		gun_tracer_timer += delta
 		
 		if !Input.is_action_pressed("aim"):
 			switch_to_state(STATE_STAND)
@@ -372,6 +389,10 @@ func _draw():
 	if state == STATE_AIM:
 		#draw_line(Vector2(0,24),get_global_mouse_pos()-get_pos(),Color(1.0, 0.0, 0.0),1)
 		draw_line(Vector2(0,-24),Vector2(-160*sin(aimdir),-160*cos(aimdir)-24),Color(1.0, 0.0, 0.0),1)
+		
+		#Firing
+		if gun_tracer_timer < GUN_TRACER_TIME:
+			draw_line(Vector2(0,-24),shot_hit,Color(1.0, 1.0, 0.0),3)
 
 func switch_to_state(switch_to):
 	last_state = state
