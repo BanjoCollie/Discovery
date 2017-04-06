@@ -7,7 +7,7 @@ const CROUCH_SPEED = 125
 const AIM_SPEED = 125
 const SPRINT_SPEED = 500
 const JUMP_SPEED = 400 #Speed of jumps
-const JUMP_DELAY = 0 #Time between jumps
+const JUMP_DELAY = 0.5 #Time between jumps
 const CLIMB_SPEED = 250 #Speed of climbing
 const LEDGE_CLIMB_SPEED = 1 #How many seconds it takes to climb up a ledge
 const GUN_TRACER_TIME = 0.1 #How many seconds the gun's tracer is drawn
@@ -45,6 +45,7 @@ var onvines = false
 var ledge_climb = false
 var ledge_climb_time = 0
 var ledge_climb_side = 0 #-1 is left, 1 is right
+var ledge_reset_timer = 0 #time until you automatically grab the next ledge
 	#Jumping
 var jump_time = 99
 	#Aiming
@@ -110,23 +111,26 @@ func _fixed_process(delta):
 				switch_to_state(STATE_AIM)
 			
 		else: #Not on the ground
-			if get_node("LeftLedge").is_colliding():
-				#If there is a wall to your left
-				if !get_node("TopLedge").is_colliding():
-					#If it is low enough for you to grab
-					if Input.is_action_pressed("jump"):
-						#Move to haning position and switch state
-						ledge_climb_side = -1
-						switch_to_state(STATE_LEDGE_HANG)
-			
-			if get_node("RightLedge").is_colliding():
-				#If there is a wall to your left
-				if !get_node("TopLedge").is_colliding():
-					#If it is low enough for you to grab
-					if Input.is_action_pressed("jump"):
-						#Move to haning position and switch state
-						ledge_climb_side = 1
-						switch_to_state(STATE_LEDGE_HANG)
+			if ledge_reset_timer <= 0:
+				if get_node("LeftLedge").is_colliding():
+					#If there is a wall to your left
+					if !get_node("TopLedge").is_colliding():
+						#If it is low enough for you to grab
+						#if Input.is_action_pressed("jump"):
+							#Move to haning position and switch state
+							ledge_climb_side = -1
+							switch_to_state(STATE_LEDGE_HANG)
+				
+				if get_node("RightLedge").is_colliding():
+					#If there is a wall to your left
+					if !get_node("TopLedge").is_colliding():
+						#If it is low enough for you to grab
+						#if Input.is_action_pressed("jump"):
+							#Move to haning position and switch state
+							ledge_climb_side = 1
+							switch_to_state(STATE_LEDGE_HANG)
+			else:
+				ledge_reset_timer -= delta
 		
 		#Check to see if you are on vines
 		onvines = false
@@ -353,8 +357,18 @@ func _fixed_process(delta):
 	
 	
 	elif state == STATE_LEDGE_HANG:
-		if !Input.is_action_pressed("jump"):
+		#if !Input.is_action_pressed("jump"):
+		if Input.is_action_pressed("move_down"):
 			switch_to_state(STATE_STAND)
+			ledge_climb = false
+			ledge_reset_timer = 0.5
+		
+		if Input.is_action_pressed("jump"):
+			if jump_time > JUMP_DELAY:
+				velocity.x = BASE_SPEED*-ledge_climb_side
+				switch_to_state(STATE_STAND)
+				ledge_climb = false
+				ledge_reset_timer = 0.5
 		
 		if Input.is_action_just_pressed("move_up"):
 			ledge_climb = true
@@ -374,6 +388,7 @@ func _fixed_process(delta):
 					move_to(Vector2(get_pos().x,get_pos().y-get_sprite_height()/2))
 					move_to(Vector2(get_pos().x+get_sprite_width()*ledge_climb_side,get_pos().y))
 					switch_to_state(STATE_STAND)
+		#jump_time = 0
 	
 	
 	
@@ -413,12 +428,15 @@ func switch_to_state(switch_to):
 		velocity.y = 0
 	elif switch_to == STATE_LEDGE_HANG:
 		velocity = Vector2(0,0)
+		#Move to ledge (first move away, then up, then towards the ledge) (Moving away makes you not get caught below small ledges)
 		if ledge_climb_side == -1:
-			move_to(Vector2(get_pos().x-1000,get_pos().y))
+			move_to(Vector2(get_pos().x+64,get_pos().y))
 			move_to(Vector2(get_pos().x,get_node("LeftLedge").get_collision_point().y+get_sprite_height()/2))
+			move_to(Vector2(get_pos().x-128,get_pos().y))
 		elif ledge_climb_side == 1:
-			move_to(Vector2(get_pos().x+1000,get_pos().y))
+			move_to(Vector2(get_pos().x-64,get_pos().y))
 			move_to(Vector2(get_pos().x,get_node("RightLedge").get_collision_point().y+get_sprite_height()/2))
+			move_to(Vector2(get_pos().x+128,get_pos().y))
 		else:
 			print("Error in switch to state: ledge climb")
 	
