@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=1]
+[gd_scene load_steps=8 format=1]
 
 [ext_resource path="res://prefabs/screecher/screecher.gd" type="Script" id=1]
 [ext_resource path="res://assets/textures/Enemies/Screecher/shreeker.png" type="Texture" id=2]
 [ext_resource path="res://assets/Sounds/AAAA.wav" type="Sample" id=3]
+[ext_resource path="res://assets/textures/Enemies/Screecher/screech.png" type="Texture" id=4]
 
 [sub_resource type="CapsuleShape2D" id=1]
 
@@ -12,7 +13,12 @@ height = 64.0
 
 [sub_resource type="SampleLibrary" id=2]
 
-samples/AAAA = { "db":0.0, "pitch":0.75, "sample":ExtResource( 3 ) }
+samples/AAA = { "db":0.0, "pitch":1.0, "sample":ExtResource( 3 ) }
+
+[sub_resource type="ConvexPolygonShape2D" id=3]
+
+custom_solver_bias = 0.0
+points = Vector2Array( 0, -64, 0, 64, -256, 96, -288, 0, -256, -96 )
 
 [node name="Screecher" type="KinematicBody2D"]
 
@@ -24,6 +30,10 @@ collision/layers = 0
 collision/mask = 2
 collision/margin = 0.08
 script/script = ExtResource( 1 )
+delay = 5
+duration = 1
+leftbound = -999
+rightbound = 999
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 
@@ -48,5 +58,32 @@ params/attenuation/distance_exp = 1.0
 config/polyphony = 1
 config/samples = SubResource( 2 )
 config/pitch_random = 0.0
+
+[node name="Screech" type="Sprite" parent="."]
+
+transform/pos = Vector2( -234.903, -5e-006 )
+transform/rot = 180.0
+transform/scale = Vector2( 4.65928, 3 )
+texture = ExtResource( 4 )
+
+[node name="Collision" type="Area2D" parent="Screech"]
+
+transform/pos = Vector2( -26.3781, -3.53354e-006 )
+transform/rot = 180.0
+transform/scale = Vector2( 0.214625, 0.333333 )
+input/pickable = true
+shapes/0/shape = SubResource( 3 )
+shapes/0/transform = Matrix32( 1, 0, 0, 1, 0, 0 )
+shapes/0/trigger = false
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Screech/Collision"]
+
+shape = SubResource( 3 )
+trigger = false
+_update_shape_index = 0
 
 

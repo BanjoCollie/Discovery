@@ -1,0 +1,79 @@
+[gd_scene load_steps=4 format=1]
+
+[ext_resource path="res://assets/tilesets/black/black.tres" type="TileSet" id=1]
+[ext_resource path="res://prefabs/player/player.tscn" type="PackedScene" id=2]
+
+[sub_resource type="RectangleShape2D" id=1]
+
+custom_solver_bias = 0.0
+extents = Vector2( 32, 256 )
+
+[node name="World" type="Node"]
+
+[node name="TileMap" type="TileMap" parent="."]
+
+mode = 0
+tile_set = ExtResource( 1 )
+cell/size = Vector2( 64, 64 )
+cell/quadrant_size = 16
+cell/custom_transform = Matrix32( 1, 0, 0, 1, 0, 0 )
+cell/half_offset = 2
+cell/tile_origin = 0
+cell/y_sort = false
+collision/use_kinematic = false
+collision/friction = 1.0
+collision/bounce = 0.0
+collision/layers = 7
+collision/mask = 7
+occluder/light_mask = 1
+tile_data = IntArray( 131040, 536870916, 196576, 536870916, 262112, 536870916, 196634, 536870916, 327648, 536870916, 262170, 536870916, 393184, 536870916, 393185, 536870916, 393186, 536870916, 393187, 536870916, 393188, 536870915, 393189, 536870913, 393194, 1073741826, 393195, 1073741826, 393196, 1073741826, 393201, 1073741828, 393202, 4, 393203, 4, 393206, 4, 393207, 4, 393210, 4, 393211, 4, 393212, 4, 327706, 536870916, 458726, 536870915, 458727, 536870913, 393242, 536870916, 524264, 536870915, 524265, 536870913, 524285, 4, 524286, 4, 524287, 4, 458769, 5, 458771, 5, 458778, 536870916, 589802, 536870915, 589803, 536870913, 524305, 5, 524307, 5, 524314, 536870916, 655340, 536870915, 655341, 536870913, 589824, 4, 589825, 4, 589826, 4, 589827, 4, 589828, 4, 589829, 4, 589830, 4, 589831, 4, 589832, 4, 589833, 4, 589834, 4, 589835, 4, 589836, 4, 589837, 4, 589838, 4, 589839, 4, 589840, 4, 589841, 5, 589843, 5, 589844, 4, 589845, 4, 589846, 4, 589847, 4, 589848, 4, 589849, 4, 589850, 4, 720878, 536870915, 720879, 536870913, 655360, 4, 655376, 4, 655377, 5, 655379, 5, 655380, 4, 786416, 536870915, 786417, 536870913, 720896, 4, 720912, 4, 720913, 5, 720915, 5, 720916, 4, 851954, 536870915, 851955, 536870913, 786432, 4, 786448, 4, 786449, 5, 786451, 5, 786452, 4, 917492, 536870915, 917493, 536870913, 851968, 4, 851984, 4, 851985, 5, 851987, 5, 851988, 4, 983030, 536870915, 983031, 536870913, 917504, 4, 917520, 4, 917521, 5, 917523, 5, 917524, 4, 1048568, 4, 1048569, 4, 1048570, 4, 1048571, 4, 1048572, 4, 1048573, 4, 1048574, 4, 1048575, 4, 983040, 4, 983056, 4, 983057, 4, 983058, 4, 983059, 4, 983060, 4 )
+
+[node name="Player" parent="." instance=ExtResource( 2 )]
+
+transform/pos = Vector2( 480, 464 )
+
+[node name="Vines" type="Node" parent="."]
+
+editor/display_folded = true
+
+[node name="Vine1" type="Area2D" parent="Vines" groups=[ "vines" ]]
+
+editor/display_folded = true
+transform/pos = Vector2( 1120, 704 )
+input/pickable = true
+shapes/0/shape = SubResource( 1 )
+shapes/0/transform = Matrix32( 1, 0, 0, 1, 0, 0 )
+shapes/0/trigger = false
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+__meta__ = { "_edit_group_":true }
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Vines/Vine1"]
+
+shape = SubResource( 1 )
+trigger = false
+_update_shape_index = 0
+
+[node name="Vine2" type="Area2D" parent="Vines" groups=[ "vines" ]]
+
+editor/display_folded = true
+transform/pos = Vector2( 1248, 704 )
+input/pickable = true
+shapes/0/shape = SubResource( 1 )
+shapes/0/transform = Matrix32( 1, 0, 0, 1, 0, 0 )
+shapes/0/trigger = false
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+__meta__ = { "_edit_group_":true }
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Vines/Vine2"]
+
+shape = SubResource( 1 )
+trigger = false
+_update_shape_index = 0
+
+

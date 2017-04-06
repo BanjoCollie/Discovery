@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=1]
+[gd_scene load_steps=5 format=1]
 
 [ext_resource path="res://Prefabs/Player/playerbrain.gd" type="Script" id=1]
 [ext_resource path="res://assets/textures/Player/player_normal.png" type="Texture" id=2]
@@ -8,6 +8,11 @@
 custom_solver_bias = 0.0
 radius = 23.0
 height = 48.0
+
+[sub_resource type="RectangleShape2D" id=2]
+
+custom_solver_bias = 0.0
+extents = Vector2( 24, 12 )
 
 [node name="Player" type="KinematicBody2D"]
 
@@ -56,8 +61,53 @@ drag_margin/bottom = 0.2
 transform/pos = Vector2( 0, 32 )
 enabled = true
 exclude_parent = true
-cast_to = Vector2( 0, -78 )
+cast_to = Vector2( 0, -76 )
 layer_mask = 1
+type_mask = 15
+
+[node name="Arms" type="Area2D" parent="."]
+
+input/pickable = true
+shapes/0/shape = SubResource( 2 )
+shapes/0/transform = Matrix32( 1, 0, 0, 1, 0, -12 )
+shapes/0/trigger = false
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+
+[node name="ArmCollision" type="CollisionShape2D" parent="Arms"]
+
+transform/pos = Vector2( 0, -12 )
+shape = SubResource( 2 )
+trigger = false
+_update_shape_index = 0
+
+[node name="LeftLedge" type="RayCast2D" parent="."]
+
+transform/pos = Vector2( -48, -80 )
+enabled = true
+exclude_parent = true
+cast_to = Vector2( 0, 48 )
+layer_mask = 4
+type_mask = 15
+
+[node name="RightLedge" type="RayCast2D" parent="."]
+
+transform/pos = Vector2( 48, -80 )
+enabled = true
+exclude_parent = true
+cast_to = Vector2( 0, 48 )
+layer_mask = 4
+type_mask = 15
+
+[node name="TopLedge" type="RayCast2D" parent="."]
+
+transform/pos = Vector2( -80, -80 )
+enabled = true
+exclude_parent = true
+cast_to = Vector2( 160, 0 )
+layer_mask = 4
 type_mask = 15
 
 
