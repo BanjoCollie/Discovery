@@ -4,6 +4,7 @@ extends KinematicBody2D
 const BASE_SPEED = 250 #Normal move speed for patrol
 const CHASE_SPEED = 450 #Speed when chasing
 const GRAVITY = 1900 #How fast gravity is
+const MAX_HEALTH = 300
 
 #Inclines
 const SLOPE_SLIDE_STOP = 35.0 #When you stop on inclines, high is more stop, low is less
@@ -24,6 +25,8 @@ onready var screech = get_node("Screech")
 onready var echo = get_node("Screech/Collision")
 var velocity = Vector2(0,0)
 
+var health = MAX_HEALTH
+
 export var delay = 5
 export var duration = 1
 var timer = 0
@@ -34,11 +37,26 @@ export var rightbound = 999
 var direction = -1
 var facing = -1
 
+	#sprites
+var base_spr
+var screech_spr
+var attack_spr
+
 func _ready():
 	set_fixed_process(true)
 	screech.set_hidden(true)
+	add_to_group("enemies")
+	
+	base_spr = preload("res://assets/textures/Enemies/Shrieker/shrieker.png")
+	screech_spr = preload("res://assets/textures/Enemies/Shrieker/shrieker_shriek.png")
+	attack_spr = preload("res://assets/textures/Enemies/Shrieker/shrieker_attack.png")
 
 func _fixed_process(delta):
+	if (health <= 0):
+		#If you die
+		queue_free()
+	
+	
 	if state == STATE_PATROL:
 		#Patrolling
 		velocity.y += GRAVITY*delta
@@ -54,11 +72,13 @@ func _fixed_process(delta):
 		if screeching == false:
 			if timer >= delay:
 				screech.set_hidden(false)
-				get_node("Sounds").play("AAA")
+				get_node("Sounds").play("Screech")
+				get_node("Sprite").set_texture(screech_spr)
 				screeching = true
 				timer = 0
 		else:
 			if timer >= duration:
+				get_node("Sprite").set_texture(base_spr)
 				screech.set_hidden(true)
 				screeching = false
 				timer = 0
@@ -103,3 +123,8 @@ func _fixed_process(delta):
 	
 func switch_to_state(switch_to):
 	state = switch_to
+
+func take_damage(dam):
+	health -= dam
+	if state == STATE_PATROL:
+		switch_to_state(STATE_CHASE)

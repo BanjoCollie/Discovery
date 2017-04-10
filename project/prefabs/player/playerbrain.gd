@@ -12,6 +12,8 @@ const CLIMB_SPEED = 250 #Speed of climbing
 const LEDGE_CLIMB_SPEED = 1 #How many seconds it takes to climb up a ledge
 const GUN_TRACER_TIME = 0.1 #How many seconds the gun's tracer is drawn
 const GUN_FIRE_DELAY = 1 #Length of time between gun shots
+const MAX_HEALTH = 100
+const GUN_DAMAGE = 50
 
 #Both of these effect climbing inclines
 const SLOPE_SLIDE_STOP = 35.0 #When you stop on inclines, high is more stop, low is less
@@ -36,6 +38,8 @@ onready var ground = get_node("/root/World/TileMap")
 	#States
 var state = STATE_STAND
 var last_state = STATE_STAND
+	#Health
+var health = MAX_HEALTH
 	#Movement
 var velocity = Vector2(0,0)
 	#Vines
@@ -262,6 +266,7 @@ func _fixed_process(delta):
 			if Input.is_action_pressed("move_right"):
 				directionx += 1
 			if directionx != 0:
+				jump_time = 0
 				velocity.x = BASE_SPEED*directionx
 				switch_to_state(STATE_STAND)
 	
@@ -310,27 +315,16 @@ func _fixed_process(delta):
 	
 	
 	elif state == STATE_AIM:
-		
-		var hor = 0
-		var vert = 0
-		if Input.is_action_pressed("aim_left"):
-			hor -= 1
-		if Input.is_action_pressed("aim_right"):
-			hor += 1
-		if Input.is_action_pressed("aim_up"):
-			vert -= 1
-		if Input.is_action_pressed("aim_down"):
-			vert += 1
-			
-			#Free aiming (with snap)
+			#Snap Aiming
 		var aimang = rad2deg(Vector2(0,-24).angle_to_point(get_global_mouse_pos()-Vector2(get_pos().x,get_pos().y-24)))
-		aimdir = deg2rad(round(aimang/45)*45)
+		#aimdir = deg2rad(round(aimang/45)*45)
+			#Free Aiming
+		aimdir = deg2rad(aimang)
 		
 			#Non free aming
 		#aimdir = Vector2(0,0).angle_to_point(Vector2(hor,vert))
 		
 		velocity.y += GRAVITY*delta
-		#velocity.x = lerp(velocity.x,0,0.1)
 		
 		if is_move_and_slide_on_floor():
 			var direction = 0
@@ -344,7 +338,15 @@ func _fixed_process(delta):
 		
 		#Firing
 		if Input.is_action_pressed("fire_gun") && gun_fire_timer>GUN_FIRE_DELAY:
-			shot_hit = Vector2(-1000*sin(aimdir),-1000*cos(aimdir)-24)
+			var space_state = get_world_2d().get_direct_space_state()
+			#var hit = space_state.intersect_ray( Vector2(0,-get_sprite_height()/4), Vector2(sin(aimdir)*10000,cos(aimdir)*10000) )
+			var hit = space_state.intersect_ray( get_global_pos()+Vector2(0,-get_sprite_height()/4), get_global_pos()-Vector2(sin(aimdir)*10000,cos(aimdir)*10000), [ self ] )
+			if (!hit.empty()):
+				shot_hit = hit.position
+				if hit.collider in get_tree().get_nodes_in_group("enemies"):
+					hit.collider.take_damage(GUN_DAMAGE)
+			else:
+				shot_hit = get_global_pos()-Vector2(sin(aimdir)*100000,cos(aimdir)*100000)
 			gun_fire_timer = 0
 			gun_tracer_timer = 0
 		
@@ -402,12 +404,11 @@ func _fixed_process(delta):
 
 func _draw():
 	if state == STATE_AIM:
-		#draw_line(Vector2(0,24),get_global_mouse_pos()-get_pos(),Color(1.0, 0.0, 0.0),1)
 		draw_line(Vector2(0,-24),Vector2(-160*sin(aimdir),-160*cos(aimdir)-24),Color(1.0, 0.0, 0.0),1)
 		
 		#Firing
 		if gun_tracer_timer < GUN_TRACER_TIME:
-			draw_line(Vector2(0,-24),shot_hit,Color(1.0, 1.0, 0.0),3)
+			draw_line(Vector2(0,-24),Vector2(shot_hit.x-get_global_pos().x,shot_hit.y-get_global_pos().y),Color(1.0, 1.0, 0.0),3)
 
 func switch_to_state(switch_to):
 	last_state = state
@@ -447,3 +448,6 @@ func get_sprite_height():
 
 func get_sprite_width():
 	return get_node("Sprite").get_texture().get_size().x
+	
+func take_damage(dam):
+	health -= dam
