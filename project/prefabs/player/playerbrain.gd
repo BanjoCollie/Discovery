@@ -78,6 +78,9 @@ func _ready():
 	
 
 func _fixed_process(delta):
+	if (health <= 0):
+		#If you die
+		print("RIP")
 	
 	if state == STATE_STAND:
 		# Determine velocity
@@ -411,7 +414,6 @@ func _draw():
 			draw_line(Vector2(0,-24),Vector2(shot_hit.x-get_global_pos().x,shot_hit.y-get_global_pos().y),Color(1.0, 1.0, 0.0),3)
 
 func switch_to_state(switch_to):
-	last_state = state
 	if switch_to == STATE_CROUCH:
 		get_node("Collision").set_shape(crouch_col)
 		get_node("Collision").set_pos(Vector2(0,24))
@@ -441,6 +443,7 @@ func switch_to_state(switch_to):
 		else:
 			print("Error in switch to state: ledge climb")
 	
+	last_state = state
 	state = switch_to
 
 func get_sprite_height():

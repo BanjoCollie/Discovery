@@ -5,6 +5,10 @@ const BASE_SPEED = 250 #Normal move speed for patrol
 const CHASE_SPEED = 450 #Speed when chasing
 const GRAVITY = 1900 #How fast gravity is
 const MAX_HEALTH = 300
+const CHASE_TIME = 10 #How many seconds will he chase you
+const PRE_ATTACK_TIME = 0.5 #How many seconds it takes to attack (Like a charge time)
+const POST_ATTACK_TIME = 0.1 #How many seconds it takes after an attack to move again (Like a cooldown time)
+const ATTACK_DAMAGE = 50
 
 #Inclines
 const SLOPE_SLIDE_STOP = 35.0 #When you stop on inclines, high is more stop, low is less
@@ -17,9 +21,11 @@ const FLOOR_NORM = Vector2(0,-1)
 #States
 const STATE_CHASE = 0
 const STATE_PATROL = 1
+const STATE_ATTACK = 2
 
 #Variables
 var state = STATE_PATROL
+var last_state = STATE_PATROL
 onready var player = get_node("/root/World/Player")
 onready var screech = get_node("Screech")
 onready var echo = get_node("Screech/Collision")
@@ -29,8 +35,13 @@ var health = MAX_HEALTH
 
 export var delay = 5
 export var duration = 1
-var timer = 0
+var screech_timer = 0
 var screeching = false
+
+var chase_timer = 0
+
+var attack_timer = 0
+var has_attacked = false
 
 export var leftbound = -999
 export var rightbound = 999
@@ -58,6 +69,11 @@ func _fixed_process(delta):
 	
 	
 	if state == STATE_PATROL:
+		#Check to see if you are touching the player
+		for instance in get_node("Touch Detection").get_overlapping_bodies():
+			if instance == player:
+				switch_to_state(STATE_CHASE)
+		
 		#Patrolling
 		velocity.y += GRAVITY*delta
 		if get_pos().x > rightbound:
@@ -68,49 +84,67 @@ func _fixed_process(delta):
 		velocity = move_and_slide(velocity,FLOOR_NORM,SLOPE_SLIDE_STOP)
 		
 		#Screeching
-		timer += delta
+		screech_timer += delta
 		if screeching == false:
-			if timer >= delay:
+			if screech_timer >= delay:
 				screech.set_hidden(false)
 				get_node("Sounds").play("Screech")
 				get_node("Sprite").set_texture(screech_spr)
 				screeching = true
-				timer = 0
+				screech_timer = 0
 		else:
-			if timer >= duration:
+			if screech_timer >= duration:
 				get_node("Sprite").set_texture(base_spr)
 				screech.set_hidden(true)
 				screeching = false
-				timer = 0
+				screech_timer = 0
 			else:
 				for instance in echo.get_overlapping_bodies():
 					if (instance == player):
-						print("ATTACK")
 						switch_to_state(STATE_CHASE)
 	
-	if state == STATE_CHASE:
-		velocity.y += GRAVITY*delta
-		direction = sign(player.get_pos().x - get_pos().x)
-		velocity.x = lerp(velocity.x, direction*CHASE_SPEED, LERP_INCREMENT)
-		velocity = move_and_slide(velocity,FLOOR_NORM,SLOPE_SLIDE_STOP)
+	elif state == STATE_CHASE:
+		chase_timer += delta
 		
-		#Screeching
-		timer += delta
-		if screeching == false:
-			if timer >= delay:
-				screech.set_hidden(false)
-				get_node("Sounds").play("AAA")
-				screeching = true
-				timer = 0
+		velocity.y += GRAVITY*delta
+		
+		#Are you close enough to hit the player?
+		var can_hit = false
+		if player in get_node("Attack Collision").get_overlapping_bodies():
+			can_hit = true
+		if can_hit == true:
+			switch_to_state(STATE_ATTACK)
 		else:
-			if timer >= duration:
-				screech.set_hidden(true)
-				screeching = false
-				timer = 0
-			else:
+			direction = sign(player.get_pos().x - get_pos().x)
+			velocity.x = lerp(velocity.x, direction*CHASE_SPEED, LERP_INCREMENT)
+			velocity = move_and_slide(velocity,FLOOR_NORM,SLOPE_SLIDE_STOP)
+		
+		for instance in get_node("Touch Detection").get_overlapping_bodies():
+			if instance == player:
+				chase_timer = 0
+		
+		for instance in echo.get_overlapping_bodies():
+			if (instance == player):
+				chase_timer = 0
+		
+		if chase_timer >= CHASE_TIME:
+			switch_to_state(STATE_PATROL)
+	
+	elif state == STATE_ATTACK:
+		attack_timer += delta
+		
+		if attack_timer >= PRE_ATTACK_TIME:
+			if has_attacked == false:
+				print("Attack now")
+				has_attacked = true
+				get_node("Sprite").set_texture(attack_spr)
 				for instance in echo.get_overlapping_bodies():
 					if (instance == player):
-						pass
+						player.take_damage(ATTACK_DAMAGE)
+			else:
+				if attack_timer >= PRE_ATTACK_TIME+POST_ATTACK_TIME:
+					switch_to_state(STATE_CHASE)
+					print("Attack is over")
 	
 	if direction != facing:
 		#If we turned around
@@ -122,6 +156,22 @@ func _fixed_process(delta):
 		
 	
 func switch_to_state(switch_to):
+	if switch_to == STATE_CHASE:
+		screech.set_hidden(false)
+		get_node("Sprite").set_texture(screech_spr)
+	elif switch_to == STATE_PATROL:
+		screech_timer = 0
+		chase_timer = 0
+		screech.set_hidden(true)
+		get_node("Sprite").set_texture(base_spr)
+	elif switch_to == STATE_ATTACK:
+		print("Preparing to attack")
+		attack_timer = 0
+		has_attacked = false
+		screech.set_hidden(true)
+		get_node("Sprite").set_texture(base_spr)
+	
+	last_state = state
 	state = switch_to
 
 func take_damage(dam):
