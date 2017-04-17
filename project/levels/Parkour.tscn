@@ -34,8 +34,6 @@ transform/pos = Vector2( 480, 464 )
 
 [node name="Vines" type="Node" parent="."]
 
-editor/display_folded = true
-
 [node name="Vine1" type="Area2D" parent="Vines" groups=[ "vines" ]]
 
 editor/display_folded = true
