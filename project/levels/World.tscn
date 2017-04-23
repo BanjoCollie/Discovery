@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=1]
+[gd_scene load_steps=8 format=1]
 
 [ext_resource path="res://prefabs/player/player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://assets/tilesets/black/black.tres" type="TileSet" id=2]
 [ext_resource path="res://prefabs/screecher/screecher.tscn" type="PackedScene" id=3]
+[ext_resource path="res://prefabs/ancient bot/Ancient Bot.tscn" type="PackedScene" id=4]
 
 [sub_resource type="RectangleShape2D" id=1]
 
@@ -103,5 +104,9 @@ _update_shape_index = 0
 [node name="Screecher" parent="." instance=ExtResource( 3 )]
 
 transform/pos = Vector2( -880, 544 )
+
+[node name="Ancient Bot" parent="." instance=ExtResource( 4 )]
+
+transform/pos = Vector2( 96, 304 )
 
 

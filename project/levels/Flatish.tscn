@@ -2,7 +2,7 @@
 
 [ext_resource path="res://assets/tilesets/black/black.tres" type="TileSet" id=1]
 [ext_resource path="res://prefabs/player/player.tscn" type="PackedScene" id=2]
-[ext_resource path="res://prefabs/screecher/screecher.tscn" type="PackedScene" id=3]
+[ext_resource path="res://prefabs/ancient bot/Ancient Bot.tscn" type="PackedScene" id=3]
 
 [sub_resource type="RectangleShape2D" id=1]
 
@@ -42,10 +42,6 @@ tile_data = IntArray( -786405, 5, -720869, 5, -655333, 5, -524329, 4, -524328, 4
 [node name="Player" parent="." instance=ExtResource( 2 )]
 
 transform/pos = Vector2( 832, 448 )
-
-[node name="Screecher" parent="." instance=ExtResource( 3 )]
-
-transform/pos = Vector2( -1504, 544 )
 
 [node name="Vine1" type="Area2D" parent="." groups=[ "vines" ]]
 
@@ -100,5 +96,23 @@ angular_damp = 1.0
 shape = SubResource( 3 )
 trigger = false
 _update_shape_index = 0
+
+[node name="Bots" type="Node" parent="."]
+
+[node name="Ancient Bot" parent="Bots" instance=ExtResource( 3 )]
+
+transform/pos = Vector2( -352, 416 )
+
+[node name="Ancient Bot2" parent="Bots" instance=ExtResource( 3 )]
+
+transform/pos = Vector2( -208, 416 )
+
+[node name="Ancient Bot3" parent="Bots" instance=ExtResource( 3 )]
+
+transform/pos = Vector2( 128, 416 )
+
+[node name="Ancient Bot4" parent="Bots" instance=ExtResource( 3 )]
+
+transform/pos = Vector2( -48, 416 )
 
 

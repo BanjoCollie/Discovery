@@ -71,7 +71,6 @@ config/pitch_random = 0.0
 
 [node name="Screech" type="Sprite" parent="."]
 
-editor/display_folded = true
 transform/pos = Vector2( -234.903, -5e-006 )
 transform/rot = 180.0
 transform/scale = Vector2( 4.65928, 3 )
