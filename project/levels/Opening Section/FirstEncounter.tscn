@@ -1,0 +1,28 @@
+[gd_scene load_steps=3 format=1]
+
+[ext_resource path="res://assets/tilesets/black/black.tres" type="TileSet" id=1]
+[ext_resource path="res://prefabs/player/player.tscn" type="PackedScene" id=2]
+
+[node name="World" type="Node"]
+
+[node name="TileMap" type="TileMap" parent="."]
+
+mode = 0
+tile_set = ExtResource( 1 )
+cell/size = Vector2( 64, 64 )
+cell/quadrant_size = 16
+cell/custom_transform = Matrix32( 1, 0, 0, 1, 0, 0 )
+cell/half_offset = 2
+cell/tile_origin = 0
+cell/y_sort = false
+collision/use_kinematic = false
+collision/friction = 1.0
+collision/bounce = 0.0
+collision/layers = 1
+collision/mask = 1
+occluder/light_mask = 1
+tile_data = IntArray( -196617, 1610612740, -196616, 1610612740, -196615, 1610612740, -196614, 1610612740, -196613, 1610612740, -196612, 1610612740, -131082, 1610612740, -131081, 1610612740, -131076, 1610612740, -131075, 1610612740, -65549, 536870916, -65548, 1610612740, -65547, 1610612740, -65546, 1610612740, -65539, 1610612740, -65538, 1610612740, -65537, 1610612740, -131072, 1610612740, 131071, 1610612740, 65536, 1610612740, 196595, 536870916, 196596, 536870916, 196597, 536870915, 196598, 536870913, 196607, 1610612740, 262133, 536870916, 262134, 1610612740, 262135, 1610612740, 262136, 1610612740, 262137, 1610612740, 262138, 1610612740, 262139, 1610612740, 262140, 1610612740, 262141, 1610612740, 262142, 1610612740, 262143, 1610612740 )
+
+[node name="Player" parent="." instance=ExtResource( 2 )]
+
+

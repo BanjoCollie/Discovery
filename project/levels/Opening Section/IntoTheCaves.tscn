@@ -6,7 +6,7 @@
 [sub_resource type="RectangleShape2D" id=1]
 
 custom_solver_bias = 0.0
-extents = Vector2( 3.40741, 3.9726 )
+extents = Vector2( 6.64969, 73.3589 )
 
 [node name="World" type="Node"]
 
@@ -14,7 +14,7 @@ extents = Vector2( 3.40741, 3.9726 )
 
 [node name="TileMap" type="TileMap" parent="."]
 
-transform/pos = Vector2( -1834, 500 )
+transform/pos = Vector2( -38, -16 )
 mode = 0
 tile_set = ExtResource( 2 )
 cell/size = Vector2( 64, 64 )
@@ -33,21 +33,22 @@ tile_data = IntArray( -1310692, 1610612740, -1310691, 1610612740, -1310690, 1610
 
 [node name="Vines1" type="Area2D" parent="." groups=[ "vines" ]]
 
-transform/pos = Vector2( 116, -264 )
+transform/pos = Vector2( 1916, -776 )
 transform/scale = Vector2( 1, 9.9375 )
 input/pickable = true
 shapes/0/shape = SubResource( 1 )
-shapes/0/transform = Matrix32( 9, 0, 0, 8.11111, 1.66666, -0.444443 )
+shapes/0/transform = Matrix32( 4.50792, 0, 0, 0.438294, -2.49999, -0.846835 )
 shapes/0/trigger = false
 gravity_vec = Vector2( 0, 1 )
 gravity = 98.0
 linear_damp = 0.1
 angular_damp = 1.0
+__meta__ = { "_edit_group_":true }
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Vines1"]
 
-transform/pos = Vector2( 1.66666, -0.444443 )
-transform/scale = Vector2( 9, 8.11111 )
+transform/pos = Vector2( -2.49999, -0.846835 )
+transform/scale = Vector2( 4.50792, 0.438294 )
 shape = SubResource( 1 )
 trigger = false
 _update_shape_index = 0
