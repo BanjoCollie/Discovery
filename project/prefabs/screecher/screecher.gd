@@ -2,12 +2,12 @@ extends KinematicBody2D
 
 #Constants we might want to change
 const BASE_SPEED = 250 #Normal move speed for patrol
-const CHASE_SPEED = 450 #Speed when chasing
+const CHASE_SPEED = 460 #Speed when chasing
 const GRAVITY = 1900 #How fast gravity is
 const MAX_HEALTH = 300
 const CHASE_TIME = 10 #How many seconds will he chase you
-const PRE_ATTACK_TIME = 0.5 #How many seconds it takes to attack (Like a charge time)
-const POST_ATTACK_TIME = 0.1 #How many seconds it takes after an attack to move again (Like a cooldown time)
+const PRE_ATTACK_TIME = 0.1 #How many seconds it takes to attack (Like a charge time)
+const POST_ATTACK_TIME = 0.5 #How many seconds it takes after an attack to move again (Like a cooldown time)
 const ATTACK_DAMAGE = 50
 
 #Inclines
