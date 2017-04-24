@@ -46,6 +46,7 @@ tile_data = IntArray( -196559, 4, -65566, 4, -65565, 4, -65564, 4, -65563, 4, -6
 
 [node name="Vine1" type="Area2D" parent="." groups=[ "vines" ]]
 
+editor/display_folded = true
 transform/pos = Vector2( -1824, 320 )
 input/pickable = true
 shapes/0/shape = SubResource( 1 )
@@ -65,6 +66,7 @@ _update_shape_index = 0
 
 [node name="Vine2" type="Area2D" parent="." groups=[ "topvines" ]]
 
+editor/display_folded = true
 transform/pos = Vector2( -1216, -32 )
 input/pickable = true
 shapes/0/shape = SubResource( 2 )
@@ -84,6 +86,7 @@ _update_shape_index = 0
 
 [node name="Vine3" type="Area2D" parent="." groups=[ "vines" ]]
 
+editor/display_folded = true
 transform/pos = Vector2( 3104.23, 159.962 )
 input/pickable = true
 shapes/0/shape = SubResource( 3 )
@@ -103,7 +106,7 @@ _update_shape_index = 0
 
 [node name="Screecher" parent="." instance=ExtResource( 3 )]
 
-transform/pos = Vector2( -880, 544 )
+transform/pos = Vector2( -928, 528 )
 
 [node name="Ancient Bot" parent="." instance=ExtResource( 4 )]
 
