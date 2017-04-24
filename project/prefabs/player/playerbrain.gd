@@ -121,7 +121,7 @@ func _fixed_process(delta):
 			if ledge_reset_timer <= 0:
 				if get_node("LeftLedge").is_colliding():
 					#If there is a wall to your left
-					if !get_node("TopLedge").is_colliding():
+					if !get_node("TopLeftLedge").is_colliding():
 						#If it is low enough for you to grab
 						#if Input.is_action_pressed("jump"):
 							#Move to haning position and switch state
@@ -130,7 +130,7 @@ func _fixed_process(delta):
 				
 				if get_node("RightLedge").is_colliding():
 					#If there is a wall to your left
-					if !get_node("TopLedge").is_colliding():
+					if !get_node("TopRightLedge").is_colliding():
 						#If it is low enough for you to grab
 						#if Input.is_action_pressed("jump"):
 							#Move to haning position and switch state
@@ -370,6 +370,7 @@ func _fixed_process(delta):
 		
 		if Input.is_action_pressed("jump"):
 			if jump_time > JUMP_DELAY:
+				velocity.y = -JUMP_SPEED
 				velocity.x = BASE_SPEED*-ledge_climb_side
 				switch_to_state(STATE_STAND)
 				ledge_climb = false
@@ -392,7 +393,7 @@ func _fixed_process(delta):
 					ledge_climb = false
 					move_to(Vector2(get_pos().x,get_pos().y-get_sprite_height()/2))
 					move_to(Vector2(get_pos().x+get_sprite_width()*ledge_climb_side,get_pos().y))
-					switch_to_state(STATE_STAND)
+					switch_to_state(STATE_CROUCH)
 		#jump_time = 0
 	
 	
