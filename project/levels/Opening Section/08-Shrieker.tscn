@@ -39,7 +39,9 @@ __meta__ = { "_edit_lock_":true }
 
 [node name="Shrieker" parent="." instance=ExtResource( 3 )]
 
-transform/pos = Vector2( 1716, 94 )
+transform/pos = Vector2( 1808, 80 )
+leftbound = 1350
+rightbound = 1800
 
 [node name="VineLeft" type="Area2D" parent="." groups=[ "vines" ]]
 

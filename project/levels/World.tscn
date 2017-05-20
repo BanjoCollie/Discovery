@@ -1,9 +1,10 @@
-[gd_scene load_steps=8 format=1]
+[gd_scene load_steps=9 format=1]
 
 [ext_resource path="res://prefabs/player/player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://assets/tilesets/black/black.tres" type="TileSet" id=2]
 [ext_resource path="res://prefabs/screecher/screecher.tscn" type="PackedScene" id=3]
 [ext_resource path="res://prefabs/ancient bot/Ancient Bot.tscn" type="PackedScene" id=4]
+[ext_resource path="res://prefabs/environment/doors/Door.tscn" type="PackedScene" id=5]
 
 [sub_resource type="RectangleShape2D" id=1]
 
@@ -105,6 +106,16 @@ _update_shape_index = 0
 [node name="Screecher" parent="." instance=ExtResource( 3 )]
 
 transform/pos = Vector2( 1070.77, 24.5739 )
+leftLimit = NodePath("This name doesnt matter")
+rightLimit = NodePath("Node2D2")
+
+[node name="This name doesnt matter" type="Node2D" parent="Screecher"]
+
+transform/pos = Vector2( -1134.77, 119.426 )
+
+[node name="Node2D2" type="Node2D" parent="Screecher"]
+
+transform/pos = Vector2( 49.23, -24.5739 )
 
 [node name="Ancient Bot" parent="." instance=ExtResource( 4 )]
 
@@ -113,5 +124,23 @@ transform/pos = Vector2( 34.8101, 284.636 )
 [node name="Ancient Bot2" parent="." instance=ExtResource( 4 )]
 
 transform/pos = Vector2( -1521.22, 140.69 )
+
+[node name="Door" parent="." instance=ExtResource( 5 )]
+
+transform/pos = Vector2( 736, 448 )
+level = "Flatish.tscn"
+
+[node name="Door1" parent="." instance=ExtResource( 5 )]
+
+transform/pos = Vector2( 496, 448 )
+level = "Parkour.tscn"
+door_num = 1
+exit_door = 1
+
+[node name="Door2" parent="." instance=ExtResource( 5 )]
+
+transform/pos = Vector2( 1552, -336 )
+door_num = 2
+exit_door = 2
 
 

@@ -52,7 +52,9 @@ var ledge_climb_side = 0 #-1 is left, 1 is right
 var ledge_reset_timer = 0 #time until you automatically grab the next ledge
 	#Jumping
 var jump_time = 99
-	#Aiming
+
+	#Gun
+var ammo = 10
 var aimdir = 0
 var shot_hit = Vector2(0,0) #Where your last shot hit
 var gun_fire_timer = GUN_FIRE_DELAY
@@ -78,6 +80,9 @@ func _ready():
 	
 	normal_spr = get_node("Sprite").get_texture()
 	crouch_spr = preload("res://assets/textures/player/player_crouch.png")
+	
+	get_node("CanvasLayer/Info/Health").set_text("Health: " + str(health))
+	get_node("CanvasLayer/Info/Ammo").set_text("Ammo: " + str(ammo))
 	
 
 func _fixed_process(delta):
@@ -364,6 +369,9 @@ func _fixed_process(delta):
 				shot_hit = get_global_pos()-Vector2(sin(aimdir)*100000,cos(aimdir)*100000)
 			gun_fire_timer = 0
 			gun_tracer_timer = 0
+			
+			ammo -= 1
+			get_node("CanvasLayer/Info/Ammo").set_text("Ammo: " + str(ammo))
 		
 		gun_fire_timer += delta
 		gun_tracer_timer += delta
@@ -467,3 +475,4 @@ func get_sprite_width():
 	
 func take_damage(dam):
 	health -= dam
+	get_node("CanvasLayer/Info/Health").set_text("Health: " + str(health))

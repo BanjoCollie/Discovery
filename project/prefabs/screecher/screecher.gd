@@ -1,5 +1,9 @@
 extends KinematicBody2D
 
+#Nodes for navigation
+export(NodePath) var leftLimit = null
+export(NodePath) var rightLimit= null 
+
 #Constants we might want to change
 const BASE_SPEED = 250 #Normal move speed for patrol
 const CHASE_SPEED = 460 #Speed when chasing
@@ -39,12 +43,12 @@ var screech_timer = 0
 var screeching = false
 
 var chase_timer = 0
+var leftbound = -999
+var rightbound = 999
 
 var attack_timer = 0
 var has_attacked = false
 
-export var leftbound = -999
-export var rightbound = 999
 var direction = -1
 var facing = -1
 
@@ -57,6 +61,15 @@ func _ready():
 	set_fixed_process(true)
 	screech.set_hidden(true)
 	add_to_group("enemies")
+	
+	#Get location of navigation nodes and delete them
+	if get_node(leftLimit) != null && get_node(rightLimit) != null:
+		leftbound = get_node(leftLimit).get_global_pos().x
+		rightbound = get_node(rightLimit).get_global_pos().x
+		get_node(leftLimit).queue_free()
+		get_node(rightLimit).queue_free()
+	else:
+		print("You messed up assigning the navigation nodes in the screecher")
 	
 	base_spr = preload("res://assets/textures/Enemies/Shrieker/shrieker.png")
 	screech_spr = preload("res://assets/textures/Enemies/Shrieker/shrieker_shriek.png")

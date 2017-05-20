@@ -1,0 +1,49 @@
+[gd_scene load_steps=5 format=1]
+
+[ext_resource path="res://prefabs/environment/doors/Side_Door.gd" type="Script" id=1]
+[ext_resource path="res://assets/textures/Environment/Doors/side_door_back.png" type="Texture" id=2]
+[ext_resource path="res://assets/textures/Environment/Doors/side_door_front.png" type="Texture" id=3]
+
+[sub_resource type="RectangleShape2D" id=1]
+
+custom_solver_bias = 0.0
+extents = Vector2( 32, 66.7187 )
+
+[node name="Door" type="Area2D"]
+
+z/z = 1
+input/pickable = true
+shapes/0/shape = SubResource( 1 )
+shapes/0/transform = Matrix32( 1, 0, 0, 0.955224, 64, -0.402992 )
+shapes/0/trigger = false
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+script/script = ExtResource( 1 )
+level = ""
+door_num = 0
+exit_door = 0
+flipped = false
+
+[node name="Back" type="Sprite" parent="."]
+
+transform/pos = Vector2( -64, 0 )
+z/z = -1
+texture = ExtResource( 2 )
+
+[node name="Front" type="Sprite" parent="."]
+
+transform/pos = Vector2( 32, 0 )
+z/z = 1
+texture = ExtResource( 3 )
+
+[node name="Collision" type="CollisionShape2D" parent="."]
+
+transform/pos = Vector2( 64, -0.402992 )
+transform/scale = Vector2( 1, 0.955224 )
+shape = SubResource( 1 )
+trigger = false
+_update_shape_index = 0
+
+

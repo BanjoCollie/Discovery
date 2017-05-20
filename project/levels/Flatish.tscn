@@ -1,8 +1,10 @@
-[gd_scene load_steps=7 format=1]
+[gd_scene load_steps=9 format=1]
 
 [ext_resource path="res://assets/tilesets/black/black.tres" type="TileSet" id=1]
 [ext_resource path="res://prefabs/player/player.tscn" type="PackedScene" id=2]
 [ext_resource path="res://prefabs/ancient bot/Ancient Bot.tscn" type="PackedScene" id=3]
+[ext_resource path="res://prefabs/environment/doors/Door.tscn" type="PackedScene" id=4]
+[ext_resource path="res://prefabs/environment/doors/Side_Door.tscn" type="PackedScene" id=5]
 
 [sub_resource type="RectangleShape2D" id=1]
 
@@ -114,5 +116,23 @@ transform/pos = Vector2( 128, 416 )
 [node name="Ancient Bot4" parent="Bots" instance=ExtResource( 3 )]
 
 transform/pos = Vector2( -48, 416 )
+
+[node name="Door" parent="." instance=ExtResource( 4 )]
+
+transform/pos = Vector2( 3664, -256 )
+level = "World.tscn"
+
+[node name="Door1" parent="." instance=ExtResource( 5 )]
+
+transform/pos = Vector2( 4320, -384 )
+level = "Parkour.tscn"
+door_num = 1
+
+[node name="Door2" parent="." instance=ExtResource( 4 )]
+
+transform/pos = Vector2( 3904, -384 )
+level = "World.tscn"
+door_num = 2
+exit_door = 2
 
 
