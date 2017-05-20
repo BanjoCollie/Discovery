@@ -24,7 +24,7 @@ extents = Vector2( 32, 160 )
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
 
-transform/pos = Vector2( -1312, 592 )
+transform/pos = Vector2( 984.616, 462.457 )
 
 [node name="TileMap" type="TileMap" parent="."]
 
@@ -104,11 +104,11 @@ _update_shape_index = 0
 
 [node name="Screecher" parent="." instance=ExtResource( 3 )]
 
-transform/pos = Vector2( -880, 544 )
+transform/pos = Vector2( 1070.77, 24.5739 )
 
 [node name="Ancient Bot" parent="." instance=ExtResource( 4 )]
 
-transform/pos = Vector2( -1644.25, 595.91 )
+transform/pos = Vector2( 34.8101, 284.636 )
 
 [node name="Ancient Bot2" parent="." instance=ExtResource( 4 )]
 

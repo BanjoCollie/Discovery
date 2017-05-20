@@ -64,6 +64,9 @@ var crouch_col
 var normal_spr
 var crouch_spr
 
+# Made for testing aiming controls
+var timeAiming = 0
+
 func _ready():
 	set_fixed_process(true)
 	
@@ -320,6 +323,15 @@ func _fixed_process(delta):
 	elif state == STATE_AIM:
 			#Snap Aiming
 		var aimang = rad2deg(Vector2(0,-24).angle_to_point(get_global_mouse_pos()-Vector2(get_pos().x,get_pos().y-24)))
+		# everything in if statement is used if player is using a controller
+		if Input.is_joy_known(0):
+			# commented out section below was for testing angles
+#			timeAiming += 1
+#			if (timeAiming%60 == 0):
+#				print("X pos of right stick is: " + String(Input.get_joy_axis(0,2)*180))
+#				print("Y pos of right stick is: " + String(Input.get_joy_axis(0,3)*180))
+			aimang = rad2deg(Vector2(0,-24).angle_to_point(Vector2(Input.get_joy_axis(0,2)*180, Input.get_joy_axis(0,3)*180)))
+		
 		#aimdir = deg2rad(round(aimang/45)*45)
 			#Free Aiming
 		aimdir = deg2rad(aimang)
