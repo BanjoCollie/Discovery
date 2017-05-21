@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=1]
+[gd_scene load_steps=7 format=1]
 
 [ext_resource path="res://prefabs/player/player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://assets/tilesets/black/black.tres" type="TileSet" id=2]
 [ext_resource path="res://prefabs/screecher/screecher.tscn" type="PackedScene" id=3]
+[ext_resource path="res://prefabs/environment/doors/Side_Door.tscn" type="PackedScene" id=4]
 
 [sub_resource type="RectangleShape2D" id=1]
 
@@ -17,6 +18,8 @@ extents = Vector2( 384, 32 )
 [node name="World" type="Node"]
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
+
+transform/pos = Vector2( 38, 14 )
 
 [node name="TileMap" type="TileMap" parent="."]
 
@@ -40,8 +43,16 @@ __meta__ = { "_edit_lock_":true }
 [node name="Shrieker" parent="." instance=ExtResource( 3 )]
 
 transform/pos = Vector2( 1808, 80 )
-leftbound = 1350
-rightbound = 1800
+leftLimit = NodePath("LeftLim")
+rightLimit = NodePath("RightLim")
+
+[node name="LeftLim" type="Node2D" parent="Shrieker"]
+
+transform/pos = Vector2( -558, 14 )
+
+[node name="RightLim" type="Node2D" parent="Shrieker"]
+
+transform/pos = Vector2( 144, 6 )
 
 [node name="VineLeft" type="Area2D" parent="." groups=[ "vines" ]]
 
@@ -120,5 +131,19 @@ collision/layers = 1
 collision/mask = 1
 occluder/light_mask = 1
 tile_data = IntArray( -786398, 1610612742, -786394, 1610612742, -786393, 1610612742, -786389, 1610612742, -524254, 1610612742, -524250, 1610612742, -524249, 1610612742, -524245, 1610612742, -458748, 1610612742, -458744, 1610612742, -458743, 1610612742, -458739, 1610612742, -458738, 1610612742, -458734, 1610612742, -458729, 1610612742, -458728, 1610612742, -458724, 1610612742, -458723, 1610612742, -458719, 1610612742, -458718, 1610612742, -458714, 1610612742, -458713, 1610612742, -458709, 1610612742, -196604, 1610612742, -196600, 1610612742, -196599, 1610612742, -196595, 1610612742, -196594, 1610612742, -196590, 1610612742, -196589, 1610612742, -196585, 1610612742, -196584, 1610612742, -196580, 1610612742, -196579, 1610612742, -196575, 1610612742, -196574, 1610612742, -196570, 1610612742, -196569, 1610612742, -196565, 1610612742, -65537, 1610612742, -131069, 1610612742, -131068, 1610612742, -131064, 1610612742, -131053, 1610612742, -131049, 1610612742, -131048, 1610612742, -131044, 1610612742, -131043, 1610612742, -131039, 1610612742, 196607, 1610612742, 131075, 1610612742, 131076, 1610612742, 131080, 1610612742, 131091, 1610612742, 131095, 1610612742, 131096, 1610612742, 131100, 1610612742, 131101, 1610612742, 131105, 1610612742 )
+
+[node name="Door0" parent="." instance=ExtResource( 4 )]
+
+transform/pos = Vector2( 32, 0 )
+level = "Opening Section/08-ShriekerLeadUp.tscn"
+exit_door = 1
+flipped = true
+
+[node name="Door1" parent="." instance=ExtResource( 4 )]
+
+transform/pos = Vector2( 2720, -544 )
+transform/scale = Vector2( 1, 1.5 )
+level = "Opening Section/10-Death.tscn"
+door_num = 1
 
 

@@ -1,0 +1,64 @@
+[gd_scene load_steps=4 format=1]
+
+[ext_resource path="res://assets/tilesets/black/black.tres" type="TileSet" id=1]
+[ext_resource path="res://prefabs/player/player.tscn" type="PackedScene" id=2]
+[ext_resource path="res://prefabs/environment/doors/Side_Door.tscn" type="PackedScene" id=3]
+
+[node name="World" type="Node"]
+
+[node name="TileMap" type="TileMap" parent="."]
+
+mode = 0
+tile_set = ExtResource( 1 )
+cell/size = Vector2( 64, 64 )
+cell/quadrant_size = 16
+cell/custom_transform = Matrix32( 1, 0, 0, 1, 0, 0 )
+cell/half_offset = 2
+cell/tile_origin = 0
+cell/y_sort = false
+collision/use_kinematic = false
+collision/friction = 1.0
+collision/bounce = 0.0
+collision/layers = 1
+collision/mask = 1
+occluder/light_mask = 1
+tile_data = IntArray( -589807, 1073741828, -589806, 1610612740, -589805, 1610612740, -589804, 1610612740, -589803, 1610612740, -589802, 1610612740, -524276, 1073741828, -524275, 1610612740, -524274, 1610612740, -524273, 1610612740, -524272, 1610612740, -524271, 1610612736, -524266, 1073741825, -524265, 1073741827, -524264, 1073741828, -524263, 4, -524262, 4, -458741, 1073741828, -458740, 1610612736, -458726, 1073741833, -393207, 1073741828, -393206, 1610612739, -393205, 1610612737, -393190, 1073741833, -327676, 1073741828, -327675, 1610612740, -327674, 1610612740, -327673, 1610612740, -327672, 1073741828, -327671, 1610612736, -327663, 1, -327662, 2, -327661, 2, -327660, 2, -327659, 2, -327658, 3, -327657, 4, -327656, 4, -327655, 4, -327654, 4, -262141, 1073741828, -262140, 1610612736, -262132, 1, -262131, 3, -262130, 4, -262129, 4, -262128, 4, -262127, 1073741828, -196606, 1073741828, -196605, 1610612736, -196597, 0, -196596, 4, -65537, 1073741828, -131072, 1073741828, -131071, 1610612739, -131070, 1610612737, -131066, 1, -131065, 3, -131064, 4, -131063, 4, -131062, 4, -131061, 1073741828, -1, 1073741833, -65533, 1, -65532, 3, -65531, 4, -65530, 1073741828, 65535, 1073741833, 1, 1, 2, 3, 3, 1073741828, 131071, 1073741828, 65536, 1073741828, 65537, 1073741828 )
+__meta__ = { "_edit_lock_":true }
+
+[node name="Player" parent="." instance=ExtResource( 2 )]
+
+transform/pos = Vector2( 32, 16 )
+
+[node name="mapBounds" type="TileMap" parent="."]
+
+visibility/visible = false
+mode = 0
+tile_set = ExtResource( 1 )
+cell/size = Vector2( 64, 64 )
+cell/quadrant_size = 16
+cell/custom_transform = Matrix32( 1, 0, 0, 1, 0, 0 )
+cell/half_offset = 2
+cell/tile_origin = 0
+cell/y_sort = false
+collision/use_kinematic = false
+collision/friction = 1.0
+collision/bounce = 0.0
+collision/layers = 1
+collision/mask = 1
+occluder/light_mask = 1
+tile_data = IntArray( -589815, 1073741830, -589811, 1073741830, -589810, 1073741830, -589806, 1073741830, -589805, 1073741830, -589801, 1073741830, -589800, 1073741830, -589796, 1073741830, -327671, 1610612742, -327667, 1073741830, -327666, 1073741830, -327662, 1073741830, -327661, 1073741830, -327657, 1073741830, -327656, 1073741830, -327652, 1073741830, -196609, 1073741830, -262141, 1073741830, -262140, 1073741830, -262136, 1073741830, -262135, 1073741830, -262131, 1073741830, 65535, 1073741830, 3, 1073741830, 4, 1073741830, 8, 1073741830, 9, 1073741830, 13, 1073741830 )
+
+[node name="Door0" parent="." instance=ExtResource( 3 )]
+
+transform/pos = Vector2( 32, 0 )
+level = "Opening Section/10-Death.tscn"
+exit_door = 1
+flipped = true
+
+[node name="Door1" parent="." instance=ExtResource( 3 )]
+
+transform/pos = Vector2( 1632, -384 )
+level = "Opening Section/12-Peak.tscn"
+door_num = 1
+
+

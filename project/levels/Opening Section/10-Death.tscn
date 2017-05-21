@@ -1,0 +1,70 @@
+[gd_scene load_steps=5 format=1]
+
+[ext_resource path="res://prefabs/player/player.tscn" type="PackedScene" id=1]
+[ext_resource path="res://assets/tilesets/black/black.tres" type="TileSet" id=2]
+[ext_resource path="res://prefabs/environment/doors/Side_Door.tscn" type="PackedScene" id=3]
+
+[sub_resource type="RectangleShape2D" id=1]
+
+custom_solver_bias = 0.0
+extents = Vector2( 32, 224 )
+
+[node name="World" type="Node"]
+
+[node name="Player" parent="." instance=ExtResource( 1 )]
+
+transform/pos = Vector2( 36, 14 )
+
+[node name="TileMap" type="TileMap" parent="."]
+
+mode = 0
+tile_set = ExtResource( 2 )
+cell/size = Vector2( 64, 64 )
+cell/quadrant_size = 16
+cell/custom_transform = Matrix32( 1, 0, 0, 1, 0, 0 )
+cell/half_offset = 2
+cell/tile_origin = 0
+cell/y_sort = false
+collision/use_kinematic = false
+collision/friction = 1.0
+collision/bounce = 0.0
+collision/layers = 1
+collision/mask = 1
+occluder/light_mask = 1
+tile_data = IntArray( -131073, 1073741828, -196608, 1073741828, -196607, 1073741828, -196606, 1073741828, -196605, 1073741828, -196604, 1073741828, -196603, 1073741828, -196602, 1073741828, -196601, 1073741828, -196600, 1073741828, -196599, 1073741828, -196598, 1073741828, -196597, 1073741828, -196596, 1073741828, -65537, 1073741833, -131061, 1073741825, -131060, 1073741827, -131059, 1073741828, -1, 1073741833, -65523, 1073741833, 65535, 1073741833, 13, 1073741833, 131071, 1073741828, 65536, 1073741828, 65537, 1073741828, 65538, 1073741828, 65539, 1073741828, 65540, 1073741828, 65541, 1073741828, 65542, 1073741828, 65543, 1073741828, 65544, 1073741834, 65545, 1073741828, 65546, 1073741828, 65547, 1073741828, 65548, 1073741828, 65549, 1073741828, 131076, 1073741828, 131080, 1073741829, 131081, 1073741828, 196612, 1073741828, 196616, 1073741829, 196617, 1073741828, 262148, 1073741828, 262152, 1073741829, 262153, 1073741828, 327684, 1073741828, 327688, 1073741829, 327689, 1073741828, 393220, 1073741828, 393224, 1073741829, 393225, 1073741828, 458756, 1073741828, 458760, 1073741829, 458761, 1073741828, 524292, 1073741828, 524296, 1073741829, 524297, 1073741828, 589828, 1073741828, 589829, 1073741828, 589830, 1073741828, 589831, 1073741828, 589832, 1073741828, 589833, 1073741828 )
+__meta__ = { "_edit_lock_":true }
+
+[node name="vine" type="Area2D" parent="." groups=[ "vines" ]]
+
+transform/pos = Vector2( 544, 352 )
+input/pickable = true
+shapes/0/shape = SubResource( 1 )
+shapes/0/transform = Matrix32( 1, 0, 0, 1, 0, 0 )
+shapes/0/trigger = false
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+__meta__ = { "_edit_group_":true }
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="vine"]
+
+shape = SubResource( 1 )
+trigger = false
+_update_shape_index = 0
+
+[node name="Door0" parent="." instance=ExtResource( 3 )]
+
+transform/pos = Vector2( 32, -32 )
+transform/scale = Vector2( 1, 1.5 )
+level = "Opening Section/09-Shrieker.tscn"
+exit_door = 1
+flipped = true
+
+[node name="Door1" parent="." instance=ExtResource( 3 )]
+
+transform/pos = Vector2( 800, 0 )
+level = "Opening Section/11-OuttaTheCaves.tscn"
+door_num = 1
+
+

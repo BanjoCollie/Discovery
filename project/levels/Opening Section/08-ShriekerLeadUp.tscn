@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=1]
+[gd_scene load_steps=6 format=1]
 
 [ext_resource path="res://prefabs/player/player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://assets/tilesets/black/black.tres" type="TileSet" id=2]
+[ext_resource path="res://prefabs/environment/doors/Side_Door.tscn" type="PackedScene" id=3]
 
 [sub_resource type="RectangleShape2D" id=1]
 
@@ -99,5 +100,19 @@ collision/layers = 1
 collision/mask = 1
 occluder/light_mask = 1
 tile_data = IntArray( -1245187, 1073741830, -1310719, 1073741830, -1310718, 1073741830, -1310714, 1073741830, -1310713, 1073741830, -1310709, 1073741830, -983043, 1073741830, -1048575, 1073741830, -1048574, 1073741830, -1048570, 1073741830, -1048569, 1073741830, -1048565, 1073741830, -917507, 1073741830, -983039, 1073741830, -983038, 1073741830, -983034, 1073741830, -983033, 1073741830, -983029, 1073741830, -655363, 1073741830, -720895, 1073741830, -720894, 1073741830, -720890, 1073741830, -720889, 1073741830, -720885, 1073741830, -589827, 1073741830, -655359, 1073741830, -655358, 1073741830, -655354, 1073741830, -655353, 1073741830, -655349, 1073741830, -327683, 1073741830, -393215, 1073741830, -393214, 1073741830, -393210, 1073741830, -393209, 1073741830, -393205, 1073741830, -262147, 1073741830, -327679, 1073741830, -327678, 1073741830, -327674, 1073741830, -327673, 1073741830, -327669, 1073741830, -3, 1073741830, -65535, 1073741830, -65534, 1073741830, -65530, 1073741830, -65529, 1073741830, -65525, 1073741830 )
+
+[node name="Door0" parent="." instance=ExtResource( 3 )]
+
+transform/pos = Vector2( -96, -112 )
+transform/scale = Vector2( 1, 2 )
+level = "Opening Section/07-SecondEncounter.tscn"
+exit_door = 1
+flipped = true
+
+[node name="Door1" parent="." instance=ExtResource( 3 )]
+
+transform/pos = Vector2( 480, -1008 )
+level = "Opening Section/09-Shrieker.tscn"
+door_num = 1
 
 

@@ -32,7 +32,7 @@ tile_data = IntArray( 131040, 1073741826, 196576, 1073741826, 262112, 1073741826
 
 [node name="Player" parent="." instance=ExtResource( 2 )]
 
-transform/pos = Vector2( 480, 464 )
+transform/pos = Vector2( -1667.53, 278.156 )
 
 [node name="Vines" type="Node" parent="."]
 

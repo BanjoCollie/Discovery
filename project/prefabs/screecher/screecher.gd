@@ -89,9 +89,9 @@ func _fixed_process(delta):
 		
 		#Patrolling
 		velocity.y += GRAVITY*delta
-		if get_pos().x > rightbound:
+		if get_pos().x + 128 > rightbound:
 			direction = -1
-		elif get_pos().x < leftbound:
+		elif get_pos().x - 128 < leftbound:
 			direction = 1
 		velocity.x = lerp(velocity.x, direction*BASE_SPEED, LERP_INCREMENT)
 		velocity = move_and_slide(velocity,FLOOR_NORM,SLOPE_SLIDE_STOP)

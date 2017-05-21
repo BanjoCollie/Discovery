@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=1]
+[gd_scene load_steps=5 format=1]
 
 [ext_resource path="res://prefabs/player/player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://assets/tilesets/black/black.tres" type="TileSet" id=2]
+[ext_resource path="res://prefabs/environment/doors/Side_Door.tscn" type="PackedScene" id=3]
 
 [sub_resource type="RectangleShape2D" id=1]
 
@@ -55,5 +56,20 @@ transform/scale = Vector2( 7.63102, 0.569588 )
 shape = SubResource( 1 )
 trigger = false
 _update_shape_index = 0
+
+[node name="Door0" parent="." instance=ExtResource( 3 )]
+
+transform/pos = Vector2( 14, -4 )
+level = "Opening Section/02-KnockKnock.tscn"
+exit_door = 1
+flipped = true
+
+[node name="Door1" parent="." instance=ExtResource( 3 )]
+
+transform/pos = Vector2( 1870, -1189 )
+transform/scale = Vector2( 1, 1.53125 )
+level = "Opening Section/04-DeeperIn.tscn"
+door_num = 1
+flipped = true
 
 
