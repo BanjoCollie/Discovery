@@ -66,8 +66,9 @@ var crouch_col
 var normal_spr
 var crouch_spr
 
-# Made for testing aiming controls
+# Made for testing purposes
 var timeAiming = 0
+var dead = false;
 
 func _ready():
 	set_fixed_process(true)
@@ -88,7 +89,9 @@ func _ready():
 func _fixed_process(delta):
 	if (health <= 0):
 		#If you die
-		print("RIP")
+		if dead == false:
+			print("You are dead")
+			dead = true
 	
 	if state == STATE_STAND:
 		# Determine velocity
