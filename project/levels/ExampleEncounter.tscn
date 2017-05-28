@@ -1,0 +1,341 @@
+[gd_scene load_steps=18 format=1]
+
+[ext_resource path="res://assets/tilesets/black/black.tres" type="TileSet" id=1]
+[ext_resource path="res://prefabs/player/player.tscn" type="PackedScene" id=2]
+[ext_resource path="res://prefabs/environment/doors/Side_Door.tscn" type="PackedScene" id=3]
+[ext_resource path="res://prefabs/screecher/screecher.tscn" type="PackedScene" id=4]
+[ext_resource path="res://prefabs/ancient bot/Ancient Bot.gd" type="Script" id=5]
+[ext_resource path="res://assets/textures/Enemies/Ancient Robot/Normal Yellow.png" type="Texture" id=6]
+[ext_resource path="res://assets/textures/Enemies/Ancient Robot/Yellow Scan.png" type="Texture" id=7]
+[ext_resource path="res://prefabs/ancient bot/Ancient Bot.tscn" type="PackedScene" id=8]
+
+[sub_resource type="CapsuleShape2D" id=6]
+
+custom_solver_bias = 0.0
+radius = 24.0
+height = 24.0
+
+[sub_resource type="ConvexPolygonShape2D" id=7]
+
+custom_solver_bias = 0.0
+points = Vector2Array( 1, 0, 64, -16, 64, 16 )
+
+[sub_resource type="RectangleShape2D" id=8]
+
+custom_solver_bias = 0.0
+extents = Vector2( 24, 36 )
+
+[sub_resource type="RectangleShape2D" id=9]
+
+custom_solver_bias = 0.0
+extents = Vector2( 16, 26 )
+
+[sub_resource type="RectangleShape2D" id=1]
+
+custom_solver_bias = 0.0
+extents = Vector2( 22.7273, 225 )
+
+[sub_resource type="RectangleShape2D" id=2]
+
+custom_solver_bias = 0.0
+extents = Vector2( 302, 32 )
+
+[sub_resource type="RectangleShape2D" id=3]
+
+custom_solver_bias = 0.0
+extents = Vector2( 32, 63 )
+
+[sub_resource type="RectangleShape2D" id=4]
+
+custom_solver_bias = 0.0
+extents = Vector2( 15.2991, 127 )
+
+[sub_resource type="RectangleShape2D" id=5]
+
+custom_solver_bias = 0.0
+extents = Vector2( 32, 64 )
+
+[node name="World" type="Node"]
+
+[node name="TileMap" type="TileMap" parent="."]
+
+transform/pos = Vector2( -150, 5 )
+mode = 0
+tile_set = ExtResource( 1 )
+cell/size = Vector2( 64, 64 )
+cell/quadrant_size = 16
+cell/custom_transform = Matrix32( 1, 0, 0, 1, 0, 0 )
+cell/half_offset = 2
+cell/tile_origin = 0
+cell/y_sort = false
+collision/use_kinematic = false
+collision/friction = 1.0
+collision/bounce = 0.0
+collision/layers = 7
+collision/mask = 7
+occluder/light_mask = 1
+tile_data = IntArray( -524282, 1610612740, -524281, 1610612740, -524280, 1610612740, -524279, 1610612740, -524278, 1610612740, -524277, 1610612740, -524276, 1610612740, -524275, 1610612740, -524274, 1610612740, -524273, 1610612740, -524272, 1610612740, -524271, 1610612740, -524270, 1610612740, -524269, 1610612740, -524268, 1610612740, -524267, 1610612740, -524244, 1610612740, -524243, 1073741828, -524242, 1073741828, -524241, 1073741828, -524240, 1073741828, -524239, 1073741828, -524238, 1073741828, -524237, 1073741828, -524236, 1073741828, -524235, 1073741828, -524234, 1073741828, -524233, 1073741828, -524232, 1073741828, -524231, 1073741828, -524230, 1610612740, -458746, 1610612736, -458745, 1610612740, -458744, 1610612741, -458743, 1610612741, -458742, 1610612741, -458741, 1610612741, -458740, 1610612741, -458739, 1610612741, -458738, 1610612741, -458737, 1610612741, -458736, 1610612741, -458735, 1610612741, -458731, 1610612740, -458713, 1610612740, -458712, 1610612740, -458711, 1610612740, -458710, 1610612740, -458709, 1610612739, -458708, 1610612737, -458694, 1073741824, -458693, 1610612740, -393211, 1610612736, -393208, 1610612741, -393199, 1610612741, -393195, 1610612740, -393179, 1610612740, -393178, 1610612739, -393177, 1610612737, -393157, 1073741824, -393156, 1610612740, -327676, 1610612736, -327672, 1610612741, -327663, 1610612741, -327659, 1610612740, -327643, 1610612740, -327620, 4, -327619, 4, -327618, 4, -262144, 1610612740, -262143, 1610612740, -262142, 1610612740, -262141, 1610612740, -262136, 1610612741, -262123, 1610612740, -262107, 1610612740, -262082, 1610612745, -196608, 1610612740, -196600, 1610612741, -196587, 1610612740, -196571, 1610612740, -196546, 1610612745, -65538, 1610612740, -65537, 1610612740, -131072, 1610612740, -131064, 1610612741, -131051, 1610612740, -131035, 4, -131032, 4, -131031, 4, -131029, 1610612740, -131028, 1610612740, -131027, 1610612740, -131026, 1610612740, -131025, 1610612740, -131024, 1610612740, -131023, 1610612740, -131022, 1610612740, -131021, 1610612740, -131020, 1610612740, -131019, 1610612740, -131018, 5, -131017, 4, -131016, 4, -131015, 4, -131014, 4, -131013, 4, -131012, 4, -131011, 4, -131010, 4, -2, 1610612745, -65528, 1610612741, -65526, 1, -65525, 3, -65524, 4, -65523, 4, -65522, 4, -65521, 4, -65520, 1610612740, -65519, 1610612740, -65518, 1610612740, -65515, 1610612740, -65499, 4, -65495, 4, -65482, 5, -65481, 4, 65534, 1610612745, 8, 1610612741, 9, 3, 10, 4, 17, 1610612740, 21, 1610612740, 34, 1610612740, 35, 4, 36, 4, 37, 4, 38, 4, 41, 4, 42, 1610612740, 43, 1610612740, 44, 536870915, 45, 536870913, 51, 1, 52, 3, 53, 4, 54, 4, 55, 4, 131070, 1610612740, 131071, 1610612740, 65536, 1610612740, 65537, 1610612740, 65538, 1610612740, 65539, 1610612740, 65540, 1610612740, 65541, 1610612740, 65542, 1610612740, 65543, 1610612740, 65544, 4, 65553, 1610612740, 65556, 1610612740, 65557, 1610612740, 65558, 1610612740, 65559, 1610612740, 65560, 1610612740, 65561, 1610612740, 65562, 1610612740, 65563, 1610612740, 65564, 1610612740, 65565, 1610612740, 65566, 1610612740, 65567, 1610612740, 65568, 1610612740, 65569, 1610612739, 65570, 1610612737, 65577, 4, 65581, 536870916, 65582, 536870916, 65583, 536870916, 65584, 536870916, 65585, 536870916, 65586, 4, 65587, 4, 131089, 1610612740, 131093, 1610612740, 131097, 1610612743, 131098, 1610612740, 131112, 4, 131113, 4, 196625, 1610612740, 196626, 1610612740, 196629, 1610612740, 196633, 1610612740, 196649, 4, 262161, 1610612740, 262164, 1610612740, 262165, 1610612740, 262166, 1610612741, 262167, 1610612740, 262168, 1610612740, 262169, 1610612740, 262179, 1, 262180, 3, 262181, 4, 262182, 4, 262183, 4, 262184, 4, 262185, 4, 327697, 1610612740, 327702, 1610612741, 327713, 1, 327714, 3, 393233, 1610612740, 393238, 1610612741, 393247, 1, 393248, 3, 458769, 1610612740, 458774, 1610612741, 458781, 1, 458782, 3, 524305, 1610612740, 524306, 1610612740, 524307, 1610612740, 524308, 1610612740, 524309, 1610612740, 524310, 1610612740, 524311, 1610612740, 524312, 1610612740, 524313, 1610612740, 524314, 1610612740, 524315, 1610612740, 524316, 1610612740, 524317, 1610612740, 524318, 1610612740 )
+__meta__ = { "_edit_lock_":true }
+
+[node name="Player" parent="." instance=ExtResource( 2 )]
+
+transform/pos = Vector2( -16, 7 )
+
+[node name="Door0" parent="." instance=ExtResource( 3 )]
+
+transform/pos = Vector2( -182, 5 )
+level = "ExampleStart.tscn"
+flipped = true
+
+[node name="Door1" parent="." instance=ExtResource( 3 )]
+
+transform/pos = Vector2( 3786, -187 )
+level = "ExampleFinish.tscn"
+door_num = 1
+
+[node name="Shrieker" parent="." instance=ExtResource( 4 )]
+
+transform/pos = Vector2( 3090, -227 )
+leftLimit = NodePath("LeftLim")
+rightLimit = NodePath("RightLim")
+
+[node name="LeftLim" type="Node2D" parent="Shrieker"]
+
+transform/pos = Vector2( -601, 277 )
+
+[node name="RightLim" type="Node2D" parent="Shrieker"]
+
+transform/pos = Vector2( 348, 33 )
+
+[node name="Ancient Bot" type="KinematicBody2D" parent="."]
+
+editor/display_folded = true
+transform/pos = Vector2( 655, -106 )
+input/pickable = false
+shapes/0/shape = SubResource( 6 )
+shapes/0/transform = Matrix32( 1, 0, 0, 1, -1, 4 )
+shapes/0/trigger = false
+collision/layers = 2
+collision/mask = 0
+collision/margin = 0.08
+script/script = ExtResource( 5 )
+__meta__ = { "_edit_group_":true }
+leftbound = 655
+rightbound = 987
+
+[node name="Body" type="Sprite" parent="Ancient Bot"]
+
+texture = ExtResource( 6 )
+offset = Vector2( 14, 0 )
+
+[node name="Light" type="Sprite" parent="Ancient Bot"]
+
+transform/pos = Vector2( 12, -22.5 )
+transform/scale = Vector2( 1.375, 1.53125 )
+texture = ExtResource( 7 )
+offset = Vector2( 32, 0 )
+
+[node name="Collision" type="Area2D" parent="Ancient Bot/Light"]
+
+input/pickable = true
+shapes/0/shape = SubResource( 7 )
+shapes/0/transform = Matrix32( 1, 0, 0, 1, 0, 0 )
+shapes/0/trigger = false
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Ancient Bot/Light/Collision"]
+
+build_mode = 0
+polygon = Vector2Array( 1, 0, 64, -16, 64, 16 )
+shape_range = Vector2( 0, 0 )
+trigger = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ancient Bot"]
+
+transform/pos = Vector2( -1, 4 )
+shape = SubResource( 6 )
+trigger = false
+_update_shape_index = 0
+
+[node name="Touch" type="Area2D" parent="Ancient Bot"]
+
+transform/pos = Vector2( 0, 4 )
+input/pickable = true
+shapes/0/shape = SubResource( 8 )
+shapes/0/transform = Matrix32( 1, 0, 0, 1, 0, 0 )
+shapes/0/trigger = false
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ancient Bot/Touch"]
+
+shape = SubResource( 8 )
+trigger = false
+_update_shape_index = 0
+
+[node name="Attack" type="Area2D" parent="Ancient Bot"]
+
+input/pickable = true
+shapes/0/shape = SubResource( 9 )
+shapes/0/transform = Matrix32( 1, 0, 0, 1, 41, 1 )
+shapes/0/trigger = false
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ancient Bot/Attack"]
+
+transform/pos = Vector2( 41, 1 )
+shape = SubResource( 9 )
+trigger = false
+_update_shape_index = 0
+
+[node name="Ancient Bot2" parent="." instance=ExtResource( 8 )]
+
+transform/pos = Vector2( 1667, 466 )
+leftbound = 1292
+rightbound = 1741
+
+[node name="Ancient Bot3" parent="." instance=ExtResource( 8 )]
+
+transform/pos = Vector2( 2068, 272 )
+leftbound = 2019
+rightbound = 2406
+
+[node name="Vine1" type="Area2D" parent="." groups=[ "vines" ]]
+
+editor/display_folded = true
+transform/pos = Vector2( 394, -159 )
+input/pickable = true
+shapes/0/shape = SubResource( 1 )
+shapes/0/transform = Matrix32( 1.39852, 0, 0, 0.995614, -0.0199608, 3 )
+shapes/0/trigger = false
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+__meta__ = { "_edit_group_":true }
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Vine1"]
+
+transform/pos = Vector2( -0.0199608, 3 )
+transform/scale = Vector2( 1.39852, 0.995614 )
+shape = SubResource( 1 )
+trigger = false
+_update_shape_index = 0
+
+[node name="Topvine" type="Area2D" parent="." groups=[ "topvines" ]]
+
+editor/display_folded = true
+transform/pos = Vector2( 700, -411 )
+input/pickable = true
+shapes/0/shape = SubResource( 2 )
+shapes/0/transform = Matrix32( 1.05902, 0, 0, 1, -18, 0 )
+shapes/0/trigger = false
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+__meta__ = { "_edit_group_":true }
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Topvine"]
+
+transform/pos = Vector2( -18, 0 )
+transform/scale = Vector2( 1.05902, 1 )
+shape = SubResource( 2 )
+trigger = false
+_update_shape_index = 0
+
+[node name="Vine2" type="Area2D" parent="." groups=[ "vines" ]]
+
+editor/display_folded = true
+transform/pos = Vector2( 970, -316 )
+input/pickable = true
+shapes/0/shape = SubResource( 3 )
+shapes/0/transform = Matrix32( 1, 0, 0, 1.01515, 0, 0.999998 )
+shapes/0/trigger = false
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+__meta__ = { "_edit_group_":true }
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Vine2"]
+
+transform/pos = Vector2( 0, 0.999998 )
+transform/scale = Vector2( 1, 1.01515 )
+shape = SubResource( 3 )
+trigger = false
+_update_shape_index = 0
+
+[node name="Vine3" type="Area2D" parent="." groups=[ "vines" ]]
+
+editor/display_folded = true
+transform/pos = Vector2( 1291, 390 )
+transform/scale = Vector2( 1, -1 )
+input/pickable = true
+shapes/0/shape = SubResource( 4 )
+shapes/0/transform = Matrix32( 2.08434, 0, 0, 1.00769, -0.858498, 1 )
+shapes/0/trigger = false
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+__meta__ = { "_edit_group_":true }
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Vine3"]
+
+transform/pos = Vector2( -0.858498, 1 )
+transform/scale = Vector2( 2.08434, 1.00769 )
+shape = SubResource( 4 )
+trigger = false
+_update_shape_index = 0
+
+[node name="Vine4" type="Area2D" parent="." groups=[ "vines" ]]
+
+editor/display_folded = true
+transform/pos = Vector2( 3338, -59 )
+input/pickable = true
+shapes/0/shape = SubResource( 5 )
+shapes/0/transform = Matrix32( 1, 0, 0, 1, 0, 0 )
+shapes/0/trigger = false
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+__meta__ = { "_edit_group_":true }
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Vine4"]
+
+shape = SubResource( 5 )
+trigger = false
+_update_shape_index = 0
+
+[node name="mapBounds" type="TileMap" parent="."]
+
+visibility/visible = false
+transform/pos = Vector2( -150, 5 )
+mode = 0
+tile_set = ExtResource( 1 )
+cell/size = Vector2( 64, 64 )
+cell/quadrant_size = 16
+cell/custom_transform = Matrix32( 1, 0, 0, 1, 0, 0 )
+cell/half_offset = 2
+cell/tile_origin = 0
+cell/y_sort = false
+collision/use_kinematic = false
+collision/friction = 1.0
+collision/bounce = 0.0
+collision/layers = 1
+collision/mask = 1
+occluder/light_mask = 1
+tile_data = IntArray( -589821, 1610612742, -589817, 1610612742, -589816, 1610612742, -589812, 1610612742, -589811, 1610612742, -589807, 1610612742, -589806, 1610612742, -589802, 1610612742, -589786, 1610612742, -589782, 1610612742, -589781, 1610612742, -589777, 1610612742, -589776, 1610612742, -589772, 1610612742, -589771, 1610612742, -589767, 1610612742, -589766, 1610612742, -589762, 1610612742, -327677, 1610612742, -327673, 1610612742, -327672, 1610612742, -327668, 1610612742, -327667, 1610612742, -327663, 1610612742, -327662, 1610612742, -327658, 1610612742, -327642, 1610612742, -327638, 1610612742, -327637, 1610612742, -327633, 1610612742, -327632, 1610612742, -327628, 1610612742, -327627, 1610612742, -327623, 1610612742, -327622, 1610612742, -327618, 1610612742, -196610, 1610612742, -262142, 1610612742, -262141, 1610612742, -262137, 1610612742, -262136, 1610612742, -262132, 1610612742, -262131, 1610612742, -262127, 1610612742, -262126, 1610612742, -262122, 1610612742, -262106, 1610612742, -262102, 1610612742, -262101, 1610612742, -262097, 1610612742, -262096, 1610612742, -262092, 1610612742, -262091, 1610612742, -262087, 1610612742, -262086, 1610612742, -262082, 1610612742, 65534, 1610612742, 2, 1610612742, 3, 1610612742, 7, 1610612742, 8, 1610612742, 12, 1610612742, 13, 1610612742, 17, 1610612742, 18, 1610612742, 22, 1610612742, 38, 1610612742, 42, 1610612742, 43, 1610612742, 47, 1610612742, 48, 1610612742, 52, 1610612742, 53, 1610612742, 57, 1610612742, 58, 1610612742, 62, 1610612742, 65554, 1610612742, 65558, 1610612742, 65559, 1610612742, 65563, 1610612742, 65564, 1610612742, 65568, 1610612742, 65569, 1610612742, 65573, 1610612742, 65574, 1610612742, 65578, 1610612742, 327698, 1610612742, 327702, 1610612742, 327703, 1610612742, 327707, 1610612742, 327708, 1610612742, 327712, 1610612742, 327713, 1610612742, 327717, 1610612742, 327718, 1610612742, 327722, 1610612742, 393234, 1610612742, 393238, 1610612742, 393239, 1610612742, 393243, 1610612742, 393244, 1610612742, 393248, 1610612742, 655378, 1610612742, 655382, 1610612742, 655383, 1610612742, 655387, 1610612742, 655388, 1610612742, 655392, 1610612742 )
+__meta__ = { "_edit_lock_":true }
+
+

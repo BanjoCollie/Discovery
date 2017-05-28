@@ -1,0 +1,54 @@
+[gd_scene load_steps=4 format=1]
+
+[ext_resource path="res://assets/tilesets/black/black.tres" type="TileSet" id=1]
+[ext_resource path="res://prefabs/player/player.tscn" type="PackedScene" id=2]
+[ext_resource path="res://prefabs/environment/doors/Side_Door.tscn" type="PackedScene" id=3]
+
+[node name="World" type="Node"]
+
+[node name="TileMap" type="TileMap" parent="."]
+
+mode = 0
+tile_set = ExtResource( 1 )
+cell/size = Vector2( 64, 64 )
+cell/quadrant_size = 16
+cell/custom_transform = Matrix32( 1, 0, 0, 1, 0, 0 )
+cell/half_offset = 2
+cell/tile_origin = 0
+cell/y_sort = false
+collision/use_kinematic = false
+collision/friction = 1.0
+collision/bounce = 0.0
+collision/layers = 1
+collision/mask = 1
+occluder/light_mask = 1
+tile_data = IntArray( -262146, 1610612740, -262145, 1073741828, -327680, 1073741828, -196610, 1610612740, -262144, 1073741825, -262143, 1073741827, -262142, 1073741828, -131074, 1610612740, -196606, 1073741824, -196605, 1073741828, -65538, 1610612740, -131069, 1610612740, -2, 1610612740, -65533, 1610612745, 65534, 1610612740, 3, 1610612745, 131070, 1610612740, 131071, 1610612740, 65536, 1610612740, 65537, 1610612740, 65538, 1610612740, 65539, 1610612740 )
+__meta__ = { "_edit_lock_":true }
+
+[node name="Player" parent="." instance=ExtResource( 2 )]
+
+[node name="Door0" parent="." instance=ExtResource( 3 )]
+
+transform/pos = Vector2( 160, 0 )
+level = "ExampleEncounter.tscn"
+
+[node name="mapBounds" type="TileMap" parent="."]
+
+visibility/visible = false
+mode = 0
+tile_set = ExtResource( 1 )
+cell/size = Vector2( 64, 64 )
+cell/quadrant_size = 16
+cell/custom_transform = Matrix32( 1, 0, 0, 1, 0, 0 )
+cell/half_offset = 2
+cell/tile_origin = 0
+cell/y_sort = false
+collision/use_kinematic = false
+collision/friction = 1.0
+collision/bounce = 0.0
+collision/layers = 7
+collision/mask = 7
+occluder/light_mask = 1
+tile_data = IntArray( -196609, 1073741830, -262141, 1073741830, 65535, 1073741830, 3, 1073741830 )
+
+

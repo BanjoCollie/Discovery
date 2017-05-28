@@ -1,8 +1,8 @@
 extends KinematicBody2D
 
 #Constants we might want to change
-const BASE_SPEED = 150 #Normal move speed for patrol
-const CHASE_SPEED = 300 #Speed when chasing
+const BASE_SPEED = 100 #Normal move speed for patrol
+const CHASE_SPEED = 250 #Speed when chasing
 const GRAVITY = 1900 #How fast gravity is
 const MAX_HEALTH = 100
 const CHASE_TIME = 10 #How many seconds will he chase you
@@ -15,7 +15,7 @@ const SLOPE_SLIDE_STOP = 35.0 #When you stop on inclines, high is more stop, low
 const LERP_INCREMENT = .2 #Increase for slightly faster responce, but less predictable and smooth movement
 
 #Constants we probably dont want to change
-const FLOOR_NORM = Vector2(0,-1)
+const FLOOR_NORM = Vector2(0,0)
 
 
 #States
@@ -50,6 +50,9 @@ var attack_spr
 var yellow_scan
 var red_scan
 
+# variables for testing
+var timer = 0
+
 func _ready():
 	set_fixed_process(true)
 	add_to_group("enemies")
@@ -61,6 +64,8 @@ func _ready():
 	red_scan = preload("res://assets/textures/Enemies/Ancient Robot/Red Scan.png")
 
 func _fixed_process(delta):
+	timer+= 60
+	
 	if (health <= 0):
 		#If you die
 		queue_free()
@@ -86,7 +91,14 @@ func _fixed_process(delta):
 		elif get_pos().x < leftbound:
 			direction = 1
 		velocity.x = lerp(velocity.x, direction*BASE_SPEED, LERP_INCREMENT)
+		
 		velocity = move_and_slide(velocity,FLOOR_NORM,SLOPE_SLIDE_STOP)
+		
+		# testing print
+		if timer % 60 == 0:
+			print("my name is " + String(get_name()) + ", my direction is "
+			 + String(direction) + ", and my velocity is " + String(velocity))
+			
 	
 	elif state == STATE_CHASE:
 		chase_timer += delta
