@@ -64,7 +64,7 @@ func _ready():
 	red_scan = preload("res://assets/textures/Enemies/Ancient Robot/Red Scan.png")
 
 func _fixed_process(delta):
-	timer+= 60
+	timer+= 1
 	
 	if (health <= 0):
 		#If you die
