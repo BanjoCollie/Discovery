@@ -31,6 +31,10 @@ const STATE_CLIMB_TOP = 3
 const STATE_SPRINT = 4
 const STATE_AIM = 5
 const STATE_LEDGE_HANG = 6
+const STATE_ABILITY_SELECT = 7
+const STATE_GUN_SELECT = 8
+const STATE_GRAPPLE_AIM = 9
+const STATE_GRAPPLING = 10
 
 onready var ground = get_node("/root/World/TileMap")
 
@@ -55,16 +59,47 @@ var jump_time = 99
 
 	#Gun
 var ammo = 10
-var aimdir = 0
+#var aimdir = 0
+var aimvect = Vector2(0,0)
 var shot_hit = Vector2(0,0) #Where your last shot hit
-var gun_fire_timer = GUN_FIRE_DELAY
-var gun_tracer_timer = GUN_TRACER_TIME
+var gun_fire_timer = 0
+var gun_tracer_timer = 0
+
+#Abilities
+var selected_ability = null
+var active_abilities = { #Make sure this matches ability icons in ability wheel node
+	Grapple = true,
+	Platforms = false,
+	Temp1 = true,
+	Temp2 = true,
+	Temp3 = false,
+	Temp4 = false,
+	Temp5 = true,
+	Temp6 = true,
+	Temp7 = false,
+	Temp8 = false,
+	Temp9 = false,
+	Temp10 = false,
+}
+var ability_states = { #The state that each ability puts you into when you press the ability button
+	Grapple = STATE_GRAPPLE_AIM
+}
+var grapple_attached = false
+var grapple_pos = Vector2(0,0)
+var grapple_vel = Vector2(0,0)
+var grapple_speed = 50 #How fast the grapple hook goes
+var grappling_speed = 90 #How fast you go when you are grappling
+var min_grapple_length = 100
+var max_grapple_length = 1000 
 
 #Sprites and collisions
 var normal_col
 var crouch_col
 var normal_spr
 var crouch_spr
+
+#Appearance
+var gun_pos
 
 # Made for testing purposes
 var timeAiming = 0
@@ -82,8 +117,10 @@ func _ready():
 	normal_spr = get_node("Sprite").get_texture()
 	crouch_spr = preload("res://assets/textures/player/player_crouch.png")
 	
-	get_node("CanvasLayer/Info/Health").set_text("Health: " + str(health))
-	get_node("CanvasLayer/Info/Ammo").set_text("Ammo: " + str(ammo))
+	get_node("Info/Health").set_text("Health: " + str(health))
+	get_node("Info/Ammo").set_text("Ammo: " + str(ammo))
+	
+	gun_pos = Vector2(0,-get_sprite_height()/4)
 	
 
 func _fixed_process(delta):
@@ -99,7 +136,7 @@ func _fixed_process(delta):
 		velocity.y += GRAVITY*delta
 		
 		#Check if you are on the ground
-		if is_move_and_slide_on_floor():
+		if is_move_and_slide_on_floor(): #May want to make falling be a different state
 			# Walk left and right
 			var direction = 0
 			if Input.is_action_pressed("move_right"):
@@ -125,8 +162,12 @@ func _fixed_process(delta):
 				switch_to_state(STATE_SPRINT)
 			
 			#Aiming
-			if Input.is_action_pressed("aim"):
+			if Input.is_action_pressed("aim") && gun_fire_timer<=0:
 				switch_to_state(STATE_AIM)
+			
+			#Ability Wheel
+			if Input.is_action_just_pressed("ability_wheel"):
+				switch_to_state(STATE_ABILITY_SELECT)
 			
 		else: #Not on the ground
 			if ledge_reset_timer <= 0:
@@ -164,6 +205,13 @@ func _fixed_process(delta):
 				if abs(get_pos().x - myvine.get_pos().x) <= 16:
 					move_to(Vector2(myvine.get_pos().x,get_pos().y))
 					switch_to_state(STATE_CLIMB)
+		
+		#Use abilities(not currently dependant on being on ground)
+		if Input.is_action_just_pressed("ability"):
+			if selected_ability in ability_states: #THis should never be the case
+				switch_to_state(ability_states[selected_ability])
+			else:
+				print("The ability you have selected has no state!")
 		
 		# Move with velocity
 		velocity = move_and_slide(velocity,FLOOR_NORM,SLOPE_SLIDE_STOP)
@@ -329,8 +377,9 @@ func _fixed_process(delta):
 	
 	
 	elif state == STATE_AIM:
-			#Snap Aiming
-		var aimang = rad2deg(Vector2(0,-24).angle_to_point(get_global_mouse_pos()-Vector2(get_pos().x,get_pos().y-24)))
+		#-24 is height of gun. Should probably be a varaible
+		aimvect = (get_global_mouse_pos()-Vector2(get_pos().x,get_pos().y) - gun_pos)
+		#aimdir = Vector2(0,-24).angle_to_point(get_global_mouse_pos()-Vector2(get_pos().x,get_pos().y))
 		# everything in if statement is used if player is using a controller
 		if Input.is_joy_known(0):
 			# commented out section below was for testing angles
@@ -338,11 +387,12 @@ func _fixed_process(delta):
 #			if (timeAiming%60 == 0):
 #				print("X pos of right stick is: " + String(Input.get_joy_axis(0,2)*180))
 #				print("Y pos of right stick is: " + String(Input.get_joy_axis(0,3)*180))
-			aimang = rad2deg(Vector2(0,-24).angle_to_point(Vector2(Input.get_joy_axis(0,2)*180, Input.get_joy_axis(0,3)*180)))
+			aimvect = (Vector2(Input.get_joy_axis(0,2)*180, Input.get_joy_axis(0,3)*180))
+			#aimdir= Vector2(0,-24).angle_to_point(Vector2(Input.get_joy_axis(0,2)*180, Input.get_joy_axis(0,3)*180))
 		
 		#aimdir = deg2rad(round(aimang/45)*45)
 			#Free Aiming
-		aimdir = deg2rad(aimang)
+		#aimdir = deg2rad(aimang)
 		
 			#Non free aming
 		#aimdir = Vector2(0,0).angle_to_point(Vector2(hor,vert))
@@ -360,24 +410,25 @@ func _fixed_process(delta):
 		velocity = move_and_slide(velocity,FLOOR_NORM,SLOPE_SLIDE_STOP)
 		
 		#Firing
-		if Input.is_action_pressed("fire_gun") && gun_fire_timer>GUN_FIRE_DELAY:
-			var space_state = get_world_2d().get_direct_space_state()
-			#var hit = space_state.intersect_ray( Vector2(0,-get_sprite_height()/4), Vector2(sin(aimdir)*10000,cos(aimdir)*10000) )
-			var hit = space_state.intersect_ray( get_global_pos()+Vector2(0,-get_sprite_height()/4), get_global_pos()-Vector2(sin(aimdir)*10000,cos(aimdir)*10000), [ self ] )
-			if (!hit.empty()):
-				shot_hit = hit.position
-				if hit.collider in get_tree().get_nodes_in_group("enemies"):
-					hit.collider.take_damage(GUN_DAMAGE)
-			else:
-				shot_hit = get_global_pos()-Vector2(sin(aimdir)*100000,cos(aimdir)*100000)
-			gun_fire_timer = 0
-			gun_tracer_timer = 0
-			
-			ammo -= 1
-			get_node("CanvasLayer/Info/Ammo").set_text("Ammo: " + str(ammo))
-		
-		gun_fire_timer += delta
-		gun_tracer_timer += delta
+		if Input.is_action_just_released("aim") && gun_fire_timer<=0:
+			if aimvect.length() > 20:
+				if ammo > 0:
+					var space_state = get_world_2d().get_direct_space_state()
+					#var hit = space_state.intersect_ray( Vector2(0,-get_sprite_height()/4), Vector2(sin(aimdir)*10000,cos(aimdir)*10000) )
+					#var hit = space_state.intersect_ray( get_global_pos()+Vector2(0,-get_sprite_height()/4), get_global_pos()-Vector2(sin(aimdir)*10000,cos(aimdir)*10000), [ self ] )
+					var hit = space_state.intersect_ray( get_global_pos()+gun_pos, get_global_pos()+10000*aimvect, [ self ] )
+					if (!hit.empty()):
+						shot_hit = hit.position
+						if hit.collider in get_tree().get_nodes_in_group("enemies"):
+							hit.collider.take_damage(GUN_DAMAGE)
+					else:
+						#shot_hit = get_global_pos()-Vector2(sin(aimdir)*10000,cos(aimdir)*10000)
+						shot_hit = get_global_pos() + 10000*aimvect
+					gun_fire_timer = GUN_FIRE_DELAY
+					gun_tracer_timer = GUN_TRACER_TIME
+					
+					ammo -= 1
+					get_node("Info/Ammo").set_text("Ammo: " + str(ammo))
 		
 		if !Input.is_action_pressed("aim"):
 			switch_to_state(STATE_STAND)
@@ -421,21 +472,104 @@ func _fixed_process(delta):
 	
 	
 	
-	else:
-		print("Player is in a state that hasn't been created")
+	elif state == STATE_ABILITY_SELECT:
+		aimvect = (get_global_mouse_pos()-Vector2(get_pos().x,get_pos().y))
+		# everything in if statement is used if player is using a controller
+		if Input.is_joy_known(0):
+			aimvect = (Vector2(Input.get_joy_axis(0,2)*180, Input.get_joy_axis(0,3)*180))
+			if aimvect.length() < 20: #Allows you to use either stick
+				aimvect = (Vector2(Input.get_joy_axis(0,0)*180, Input.get_joy_axis(0,1)*180))
+		get_node("Ability Wheel").update()
+		
+		if Input.is_action_just_released("ability_wheel"):
+			selected_ability = get_node("Ability Wheel").ability
+			switch_to_state(STATE_STAND)
+		
+		#velocity.y += GRAVITY*delta
+		#velocity = move_and_slide(velocity,FLOOR_NORM,SLOPE_SLIDE_STOP)
 	
+	
+	
+	elif state == STATE_GRAPPLE_AIM:
+		aimvect = (get_global_mouse_pos()-Vector2(get_pos().x,get_pos().y) - gun_pos)
+		if Input.is_joy_known(0):
+			aimvect = (Vector2(Input.get_joy_axis(0,2)*180, Input.get_joy_axis(0,3)*180))
+		
+		if Input.is_action_just_released("ability"):
+			if aimvect.length() > 10:
+				grapple_attached = false
+				grapple_vel = aimvect.normalized()*grapple_speed
+				grapple_pos = get_global_pos() + gun_pos
+				switch_to_state(STATE_GRAPPLING)
+			else:
+				switch_to_state(STATE_STAND)
+		
+		velocity.y += GRAVITY*delta
+		if is_move_and_slide_on_floor():
+			var direction = 0
+			if Input.is_action_pressed("move_right"):
+				direction += 1
+			if Input.is_action_pressed("move_left"):
+				direction -= 1
+			velocity.x = lerp(velocity.x, direction*AIM_SPEED, LERP_INCREMENT+.1)
+		velocity = move_and_slide(velocity,FLOOR_NORM,SLOPE_SLIDE_STOP)
+	
+	elif state == STATE_GRAPPLING:
+		if !grapple_attached:
+			var space_state = get_world_2d().get_direct_space_state()
+			var hit = space_state.intersect_ray(grapple_pos, grapple_pos+grapple_vel, [ self ] )
+			if hit.empty(): #If the grapple wont hit anything this frame
+				grapple_pos += grapple_vel
+				if get_global_pos().distance_to(grapple_pos) > max_grapple_length:
+					switch_to_state(STATE_STAND)
+			else: #The grapple hit something
+				grapple_pos = hit["position"]
+				grapple_attached = true
+			
+			velocity.y += GRAVITY*delta
+			if is_move_and_slide_on_floor():
+				var direction = 0
+				if Input.is_action_pressed("move_right"):
+					direction += 1
+				if Input.is_action_pressed("move_left"):
+					direction -= 1
+				velocity.x = lerp(velocity.x, direction*AIM_SPEED, LERP_INCREMENT+.1)
+			velocity = move_and_slide(velocity,FLOOR_NORM,SLOPE_SLIDE_STOP)
+		else:
+			velocity += (grapple_pos-get_global_pos()).normalized()*grappling_speed
+			
+			#velocity.y += GRAVITY*delta #Gravity makes it less fun IMO
+			velocity = move_and_slide(velocity,FLOOR_NORM,SLOPE_SLIDE_STOP)
+			if get_global_pos().distance_to(grapple_pos) < min_grapple_length:
+				switch_to_state(STATE_STAND)
+		
+	
+	
+	else:
+		print("Player is in state " + str(state) + " which hasn't been created")
+	
+	if gun_fire_timer > 0:
+			gun_fire_timer -= delta
+	if gun_tracer_timer > 0:
+		gun_tracer_timer -= delta
 	jump_time += delta
 	update()
 
 
 
 func _draw():
-	if state == STATE_AIM:
-		draw_line(Vector2(0,-24),Vector2(-160*sin(aimdir),-160*cos(aimdir)-24),Color(1.0, 0.0, 0.0),1)
+	#Firing
+	if gun_tracer_timer > 0:
+		draw_line(gun_pos,Vector2(shot_hit.x-get_global_pos().x,shot_hit.y-get_global_pos().y),Color(1.0, 1.0, 0.0),3)
+	
+	if state == STATE_AIM || state == STATE_GRAPPLE_AIM:
+		#draw_line(Vector2(0,-24),Vector2(-160*sin(aimdir),-160*cos(aimdir)-24),Color(1.0, 0.0, 0.0),1)
+		if aimvect.length() > 10:
+			draw_line(gun_pos,160*(aimvect).normalized()+gun_pos,Color(1.0, 0.0, 0.0),1)
+	
+	elif state == STATE_GRAPPLING:
+		draw_line(gun_pos,grapple_pos-get_global_pos(),Color(1,1,1,1),3)
 		
-		#Firing
-		if gun_tracer_timer < GUN_TRACER_TIME:
-			draw_line(Vector2(0,-24),Vector2(shot_hit.x-get_global_pos().x,shot_hit.y-get_global_pos().y),Color(1.0, 1.0, 0.0),3)
 
 func switch_to_state(switch_to):
 	if switch_to == STATE_CROUCH:
@@ -466,6 +600,16 @@ func switch_to_state(switch_to):
 			move_to(Vector2(get_pos().x+128,get_pos().y))
 		else:
 			print("Error in switch to state: ledge climb")
+	elif switch_to == STATE_AIM:
+		aimvect = Vector2(0,0)
+	elif switch_to == STATE_ABILITY_SELECT:
+		aimvect = Vector2(0,0)
+		OS.set_time_scale(0.1)
+		get_node("Ability Wheel").set_hidden(false)
+	
+	if state == STATE_ABILITY_SELECT:
+		OS.set_time_scale(1)
+		get_node("Ability Wheel").set_hidden(true)
 	
 	last_state = state
 	state = switch_to
@@ -478,4 +622,5 @@ func get_sprite_width():
 	
 func take_damage(dam):
 	health -= dam
-	get_node("CanvasLayer/Info/Health").set_text("Health: " + str(health))
+	get_node("Info/Health").set_text("Health: " + str(health))
+	

@@ -148,7 +148,6 @@ func _fixed_process(delta):
 		
 		if attack_timer >= PRE_ATTACK_TIME:
 			if has_attacked == false:
-				print("Attack now")
 				has_attacked = true
 				get_node("Sprite").set_texture(attack_spr)
 				for instance in echo.get_overlapping_bodies():
@@ -157,7 +156,6 @@ func _fixed_process(delta):
 			else:
 				if attack_timer >= PRE_ATTACK_TIME+POST_ATTACK_TIME:
 					switch_to_state(STATE_CHASE)
-					print("Attack is over")
 	
 	if direction != facing:
 		#If we turned around
@@ -178,7 +176,6 @@ func switch_to_state(switch_to):
 		screech.set_hidden(true)
 		get_node("Sprite").set_texture(base_spr)
 	elif switch_to == STATE_ATTACK:
-		print("Preparing to attack")
 		attack_timer = 0
 		has_attacked = false
 		screech.set_hidden(true)

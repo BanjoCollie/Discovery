@@ -10,6 +10,6 @@ func _ready():
 	player = get_node("/root/World/Player")
 
 func _process(delta):
-	if Input.is_action_just_pressed("move_up"):
+	if Input.is_action_just_pressed("move_up") && player.state != player.STATE_ABILITY_SELECT:
 		if player in get_overlapping_bodies():
 			get_node("/root/persistant").goto_level("res://levels/" + level,exit_door)

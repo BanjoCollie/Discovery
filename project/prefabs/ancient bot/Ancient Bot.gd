@@ -11,11 +11,11 @@ const POST_ATTACK_TIME = 0.5 #How many seconds it takes after an attack to move 
 const ATTACK_DAMAGE = 20
 
 #Inclines
-const SLOPE_SLIDE_STOP = 35.0 #When you stop on inclines, high is more stop, low is less
+const SLOPE_SLIDE_STOP = 10.0 #When you stop on inclines, high is more stop, low is less
 const LERP_INCREMENT = .2 #Increase for slightly faster responce, but less predictable and smooth movement
 
 #Constants we probably dont want to change
-const FLOOR_NORM = Vector2(0,0)
+const FLOOR_NORM = Vector2(0,-1)
 
 
 #States
@@ -50,9 +50,6 @@ var attack_spr
 var yellow_scan
 var red_scan
 
-# variables for testing
-var timer = 0
-
 func _ready():
 	set_fixed_process(true)
 	add_to_group("enemies")
@@ -64,8 +61,6 @@ func _ready():
 	red_scan = preload("res://assets/textures/Enemies/Ancient Robot/Red Scan.png")
 
 func _fixed_process(delta):
-	timer+= 1
-	
 	if (health <= 0):
 		#If you die
 		queue_free()
@@ -91,14 +86,7 @@ func _fixed_process(delta):
 		elif get_pos().x < leftbound:
 			direction = 1
 		velocity.x = lerp(velocity.x, direction*BASE_SPEED, LERP_INCREMENT)
-		
 		velocity = move_and_slide(velocity,FLOOR_NORM,SLOPE_SLIDE_STOP)
-		
-		# testing print
-		if timer % 60 == 0:
-			print("my name is " + String(get_name()) + ", my direction is "
-			 + String(direction) + ", and my velocity is " + String(velocity))
-			
 	
 	elif state == STATE_CHASE:
 		chase_timer += delta
@@ -148,6 +136,8 @@ func _fixed_process(delta):
 		
 		detect.set_pos(Vector2(-detect.get_pos().x,detect.get_pos().y))
 		detect.set_rotd(fmod(detect.get_rotd()+180,360))
+		
+		get_node("Attack/CollisionShape2D").set_pos(-get_node("Attack/CollisionShape2D").get_pos())
 		
 		facing = direction
 		

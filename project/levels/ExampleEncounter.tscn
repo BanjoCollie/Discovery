@@ -9,48 +9,48 @@
 [ext_resource path="res://assets/textures/Enemies/Ancient Robot/Yellow Scan.png" type="Texture" id=7]
 [ext_resource path="res://prefabs/ancient bot/Ancient Bot.tscn" type="PackedScene" id=8]
 
-[sub_resource type="CapsuleShape2D" id=6]
+[sub_resource type="CapsuleShape2D" id=1]
 
 custom_solver_bias = 0.0
 radius = 24.0
 height = 24.0
 
-[sub_resource type="ConvexPolygonShape2D" id=7]
+[sub_resource type="ConvexPolygonShape2D" id=2]
 
 custom_solver_bias = 0.0
 points = Vector2Array( 1, 0, 64, -16, 64, 16 )
 
-[sub_resource type="RectangleShape2D" id=8]
+[sub_resource type="RectangleShape2D" id=3]
 
 custom_solver_bias = 0.0
 extents = Vector2( 24, 36 )
 
-[sub_resource type="RectangleShape2D" id=9]
+[sub_resource type="RectangleShape2D" id=4]
 
 custom_solver_bias = 0.0
 extents = Vector2( 16, 26 )
 
-[sub_resource type="RectangleShape2D" id=1]
+[sub_resource type="RectangleShape2D" id=5]
 
 custom_solver_bias = 0.0
 extents = Vector2( 22.7273, 225 )
 
-[sub_resource type="RectangleShape2D" id=2]
+[sub_resource type="RectangleShape2D" id=6]
 
 custom_solver_bias = 0.0
 extents = Vector2( 302, 32 )
 
-[sub_resource type="RectangleShape2D" id=3]
+[sub_resource type="RectangleShape2D" id=7]
 
 custom_solver_bias = 0.0
 extents = Vector2( 32, 63 )
 
-[sub_resource type="RectangleShape2D" id=4]
+[sub_resource type="RectangleShape2D" id=8]
 
 custom_solver_bias = 0.0
 extents = Vector2( 15.2991, 127 )
 
-[sub_resource type="RectangleShape2D" id=5]
+[sub_resource type="RectangleShape2D" id=9]
 
 custom_solver_bias = 0.0
 extents = Vector2( 32, 64 )
@@ -112,7 +112,7 @@ transform/pos = Vector2( 348, 33 )
 editor/display_folded = true
 transform/pos = Vector2( 655, -106 )
 input/pickable = false
-shapes/0/shape = SubResource( 6 )
+shapes/0/shape = SubResource( 1 )
 shapes/0/transform = Matrix32( 1, 0, 0, 1, -1, 4 )
 shapes/0/trigger = false
 collision/layers = 2
@@ -138,7 +138,7 @@ offset = Vector2( 32, 0 )
 [node name="Collision" type="Area2D" parent="Ancient Bot/Light"]
 
 input/pickable = true
-shapes/0/shape = SubResource( 7 )
+shapes/0/shape = SubResource( 2 )
 shapes/0/transform = Matrix32( 1, 0, 0, 1, 0, 0 )
 shapes/0/trigger = false
 gravity_vec = Vector2( 0, 1 )
@@ -156,7 +156,7 @@ trigger = false
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Ancient Bot"]
 
 transform/pos = Vector2( -1, 4 )
-shape = SubResource( 6 )
+shape = SubResource( 1 )
 trigger = false
 _update_shape_index = 0
 
@@ -164,7 +164,7 @@ _update_shape_index = 0
 
 transform/pos = Vector2( 0, 4 )
 input/pickable = true
-shapes/0/shape = SubResource( 8 )
+shapes/0/shape = SubResource( 3 )
 shapes/0/transform = Matrix32( 1, 0, 0, 1, 0, 0 )
 shapes/0/trigger = false
 gravity_vec = Vector2( 0, 1 )
@@ -174,14 +174,14 @@ angular_damp = 1.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Ancient Bot/Touch"]
 
-shape = SubResource( 8 )
+shape = SubResource( 3 )
 trigger = false
 _update_shape_index = 0
 
 [node name="Attack" type="Area2D" parent="Ancient Bot"]
 
 input/pickable = true
-shapes/0/shape = SubResource( 9 )
+shapes/0/shape = SubResource( 4 )
 shapes/0/transform = Matrix32( 1, 0, 0, 1, 41, 1 )
 shapes/0/trigger = false
 gravity_vec = Vector2( 0, 1 )
@@ -192,7 +192,7 @@ angular_damp = 1.0
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Ancient Bot/Attack"]
 
 transform/pos = Vector2( 41, 1 )
-shape = SubResource( 9 )
+shape = SubResource( 4 )
 trigger = false
 _update_shape_index = 0
 
@@ -213,7 +213,7 @@ rightbound = 2406
 editor/display_folded = true
 transform/pos = Vector2( 394, -159 )
 input/pickable = true
-shapes/0/shape = SubResource( 1 )
+shapes/0/shape = SubResource( 5 )
 shapes/0/transform = Matrix32( 1.39852, 0, 0, 0.995614, -0.0199608, 3 )
 shapes/0/trigger = false
 gravity_vec = Vector2( 0, 1 )
@@ -226,7 +226,7 @@ __meta__ = { "_edit_group_":true }
 
 transform/pos = Vector2( -0.0199608, 3 )
 transform/scale = Vector2( 1.39852, 0.995614 )
-shape = SubResource( 1 )
+shape = SubResource( 5 )
 trigger = false
 _update_shape_index = 0
 
@@ -235,7 +235,7 @@ _update_shape_index = 0
 editor/display_folded = true
 transform/pos = Vector2( 700, -411 )
 input/pickable = true
-shapes/0/shape = SubResource( 2 )
+shapes/0/shape = SubResource( 6 )
 shapes/0/transform = Matrix32( 1.05902, 0, 0, 1, -18, 0 )
 shapes/0/trigger = false
 gravity_vec = Vector2( 0, 1 )
@@ -248,7 +248,7 @@ __meta__ = { "_edit_group_":true }
 
 transform/pos = Vector2( -18, 0 )
 transform/scale = Vector2( 1.05902, 1 )
-shape = SubResource( 2 )
+shape = SubResource( 6 )
 trigger = false
 _update_shape_index = 0
 
@@ -257,7 +257,7 @@ _update_shape_index = 0
 editor/display_folded = true
 transform/pos = Vector2( 970, -316 )
 input/pickable = true
-shapes/0/shape = SubResource( 3 )
+shapes/0/shape = SubResource( 7 )
 shapes/0/transform = Matrix32( 1, 0, 0, 1.01515, 0, 0.999998 )
 shapes/0/trigger = false
 gravity_vec = Vector2( 0, 1 )
@@ -270,7 +270,7 @@ __meta__ = { "_edit_group_":true }
 
 transform/pos = Vector2( 0, 0.999998 )
 transform/scale = Vector2( 1, 1.01515 )
-shape = SubResource( 3 )
+shape = SubResource( 7 )
 trigger = false
 _update_shape_index = 0
 
@@ -280,7 +280,7 @@ editor/display_folded = true
 transform/pos = Vector2( 1291, 390 )
 transform/scale = Vector2( 1, -1 )
 input/pickable = true
-shapes/0/shape = SubResource( 4 )
+shapes/0/shape = SubResource( 8 )
 shapes/0/transform = Matrix32( 2.08434, 0, 0, 1.00769, -0.858498, 1 )
 shapes/0/trigger = false
 gravity_vec = Vector2( 0, 1 )
@@ -293,7 +293,7 @@ __meta__ = { "_edit_group_":true }
 
 transform/pos = Vector2( -0.858498, 1 )
 transform/scale = Vector2( 2.08434, 1.00769 )
-shape = SubResource( 4 )
+shape = SubResource( 8 )
 trigger = false
 _update_shape_index = 0
 
@@ -302,7 +302,7 @@ _update_shape_index = 0
 editor/display_folded = true
 transform/pos = Vector2( 3338, -59 )
 input/pickable = true
-shapes/0/shape = SubResource( 5 )
+shapes/0/shape = SubResource( 9 )
 shapes/0/transform = Matrix32( 1, 0, 0, 1, 0, 0 )
 shapes/0/trigger = false
 gravity_vec = Vector2( 0, 1 )
@@ -313,7 +313,7 @@ __meta__ = { "_edit_group_":true }
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Vine4"]
 
-shape = SubResource( 5 )
+shape = SubResource( 9 )
 trigger = false
 _update_shape_index = 0
 

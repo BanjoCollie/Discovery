@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=1]
+[gd_scene load_steps=6 format=1]
 
 [ext_resource path="res://Prefabs/Player/playerbrain.gd" type="Script" id=1]
 [ext_resource path="res://assets/textures/Player/player_normal.png" type="Texture" id=2]
+[ext_resource path="res://prefabs/player/ability_wheel.gd" type="Script" id=3]
 
 [sub_resource type="CapsuleShape2D" id=1]
 
@@ -16,6 +17,7 @@ extents = Vector2( 24, 12 )
 
 [node name="Player" type="KinematicBody2D"]
 
+transform/pos = Vector2( 512, 304 )
 z/z = 1
 input/pickable = false
 shapes/0/shape = SubResource( 1 )
@@ -36,7 +38,7 @@ shape = SubResource( 1 )
 trigger = false
 _update_shape_index = 0
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="Camera" type="Camera2D" parent="."]
 
 anchor_mode = 1
 rotating = false
@@ -119,25 +121,18 @@ cast_to = Vector2( -80, 0 )
 layer_mask = 4
 type_mask = 15
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
-
-layer = 1
-offset = Vector2( 0, 0 )
-rotation = 0.0
-scale = Vector2( 1, 1 )
-
-[node name="Info" type="Panel" parent="CanvasLayer"]
+[node name="Info" type="Panel" parent="."]
 
 focus/ignore_mouse = false
 focus/stop_mouse = true
 size_flags/horizontal = 2
 size_flags/vertical = 2
-margin/left = -176.0
-margin/top = -144.0
-margin/right = -76.0
-margin/bottom = -44.0
+margin/left = -512.0
+margin/top = -300.0
+margin/right = -412.0
+margin/bottom = -200.0
 
-[node name="Health" type="Label" parent="CanvasLayer/Info"]
+[node name="Health" type="Label" parent="Info"]
 
 focus_neighbour/left = NodePath("..")
 focus_neighbour/top = NodePath("..")
@@ -145,16 +140,16 @@ focus/ignore_mouse = true
 focus/stop_mouse = true
 size_flags/horizontal = 2
 size_flags/vertical = 0
-margin/left = 0.0
-margin/top = 0.0
-margin/right = 96.0
-margin/bottom = 16.0
+margin/left = 2.0
+margin/top = 2.0
+margin/right = 98.0
+margin/bottom = 18.0
 text = "Health: \?"
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 
-[node name="Ammo" type="Label" parent="CanvasLayer/Info"]
+[node name="Ammo" type="Label" parent="Info"]
 
 focus_neighbour/left = NodePath("..")
 focus_neighbour/top = NodePath("..")
@@ -162,13 +157,30 @@ focus/ignore_mouse = true
 focus/stop_mouse = true
 size_flags/horizontal = 2
 size_flags/vertical = 0
-margin/left = 0.0
+margin/left = 2.0
 margin/top = 32.0
-margin/right = 96.0
+margin/right = 98.0
 margin/bottom = 46.0
 text = "Ammo: \?"
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
+
+[node name="Ability Wheel" type="Control" parent="."]
+
+visibility/visible = false
+anchor/left = 3
+anchor/top = 3
+anchor/right = 3
+anchor/bottom = 3
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 2
+margin/left = 32.0
+margin/top = 32.0
+margin/right = -8.0
+margin/bottom = -8.0
+script/script = ExtResource( 3 )
 
 
