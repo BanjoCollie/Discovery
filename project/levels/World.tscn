@@ -143,4 +143,10 @@ transform/pos = Vector2( 1552, -336 )
 door_num = 2
 exit_door = 2
 
+[node name="Ancient Bot3" parent="." instance=ExtResource( 4 )]
+
+transform/pos = Vector2( 2144, 86 )
+leftbound = 0
+rightbound = 0
+
 
