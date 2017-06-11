@@ -515,6 +515,9 @@ func _fixed_process(delta):
 		velocity = move_and_slide(velocity,FLOOR_NORM,SLOPE_SLIDE_STOP)
 	
 	elif state == STATE_GRAPPLING:
+		if Input.is_action_just_pressed("crouch"):
+			switch_to_state(STATE_STAND)
+		
 		if !grapple_attached:
 			var space_state = get_world_2d().get_direct_space_state()
 			var hit = space_state.intersect_ray(grapple_pos, grapple_pos+grapple_vel, [ self ] )
@@ -536,10 +539,14 @@ func _fixed_process(delta):
 				velocity.x = lerp(velocity.x, direction*AIM_SPEED, LERP_INCREMENT+.1)
 			velocity = move_and_slide(velocity,FLOOR_NORM,SLOPE_SLIDE_STOP)
 		else:
+			var old_pos = get_global_pos()
 			velocity += (grapple_pos-get_global_pos()).normalized()*grappling_speed
 			
 			#velocity.y += GRAVITY*delta #Gravity makes it less fun IMO
 			velocity = move_and_slide(velocity,FLOOR_NORM,SLOPE_SLIDE_STOP)
+			if get_global_pos() == old_pos:
+				#You are stuck
+				switch_to_state(STATE_STAND)
 			if get_global_pos().distance_to(grapple_pos) < min_grapple_length:
 				switch_to_state(STATE_STAND)
 		
