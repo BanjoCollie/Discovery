@@ -90,7 +90,7 @@ var grapple_vel = Vector2(0,0)
 var grapple_speed = 50 #How fast the grapple hook goes
 var grappling_speed = 90 #How fast you go when you are grappling
 var min_grapple_length = 100
-var max_grapple_length = 1000 
+var max_grapple_length = 500 
 
 #Sprites and collisions
 var normal_col
@@ -548,7 +548,11 @@ func _fixed_process(delta):
 				#You are stuck
 				switch_to_state(STATE_STAND)
 			if get_global_pos().distance_to(grapple_pos) < min_grapple_length:
+				#Grapple has finished
 				switch_to_state(STATE_STAND)
+				#added by michael
+				velocity.y = .4*velocity.y
+				velocity.x = .4*velocity.x
 		
 	
 	
