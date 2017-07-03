@@ -153,7 +153,7 @@ type_mask = 15
 transform/pos = Vector2( 0, -80 )
 enabled = true
 exclude_parent = false
-cast_to = Vector2( 75, 0 )
+cast_to = Vector2( 74, 0 )
 layer_mask = 4
 type_mask = 15
 
@@ -162,7 +162,7 @@ type_mask = 15
 transform/pos = Vector2( 0, -80 )
 enabled = true
 exclude_parent = true
-cast_to = Vector2( -75, 0 )
+cast_to = Vector2( -74, 0 )
 layer_mask = 4
 type_mask = 15
 

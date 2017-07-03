@@ -1,7 +1,7 @@
 extends KinematicBody2D
 
 #Constants we might want to change
-const GRAVITY = 1900 #How fast gravity is
+const GRAVITY = 1800 #How fast gravity is
 const BASE_SPEED = 250 #Base speed of the player
 const CROUCH_SPEED = 125
 const AIM_SPEED = 125
