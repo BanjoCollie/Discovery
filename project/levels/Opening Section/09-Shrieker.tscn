@@ -19,7 +19,7 @@ extents = Vector2( 384, 32 )
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
 
-transform/pos = Vector2( 38, 14 )
+transform/pos = Vector2( 204, 28 )
 
 [node name="TileMap" type="TileMap" parent="."]
 

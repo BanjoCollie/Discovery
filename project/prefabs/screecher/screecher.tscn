@@ -40,10 +40,10 @@ collision/layers = 2
 collision/mask = 0
 collision/margin = 0.08
 script/script = ExtResource( 1 )
+leftLimit = null
+rightLimit = null
 delay = 5
 duration = 1
-leftbound = -999
-rightbound = 999
 
 [node name="Hitbox" type="CollisionShape2D" parent="."]
 

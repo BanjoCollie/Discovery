@@ -95,8 +95,9 @@ var max_grapple_length = 500
 #Sprites and collisions
 var normal_col
 var crouch_col
-var normal_spr
-var crouch_spr
+
+#Used for animation
+var isRight = true 
 
 #Appearance
 var gun_pos
@@ -113,9 +114,6 @@ func _ready():
 	crouch_col = CapsuleShape2D.new()
 	crouch_col.set_height(0)
 	crouch_col.set_radius(23)
-	
-	normal_spr = get_node("Sprite").get_texture()
-	crouch_spr = preload("res://assets/textures/player/player_crouch.png")
 	
 	get_node("Info/Health").set_text("Health: " + str(health))
 	get_node("Info/Ammo").set_text("Ammo: " + str(ammo))
@@ -141,8 +139,14 @@ func _fixed_process(delta):
 			var direction = 0
 			if Input.is_action_pressed("move_right"):
 				direction += 1
+				if !isRight:
+					get_node('Sprite').get_node("AnimationPlayer").play("turnRight")
+					isRight = true
 			if Input.is_action_pressed("move_left"):
 				direction -= 1
+				if isRight:
+					get_node('Sprite').get_node("AnimationPlayer").play("turnLeft")
+					isRight = false
 			velocity.x = lerp(velocity.x, direction*BASE_SPEED, LERP_INCREMENT)
 			
 			#Jumping
@@ -174,20 +178,22 @@ func _fixed_process(delta):
 				if get_node("LeftLedge").is_colliding():
 					#If there is a wall to your left
 					if !get_node("TopLeftLedge").is_colliding():
+						print(get_node("LeftLedge").get_collision_point())
 						#If it is low enough for you to grab
 						#if Input.is_action_pressed("jump"):
-							#Move to haning position and switch state
-							ledge_climb_side = -1
-							switch_to_state(STATE_LEDGE_HANG)
+						#Move to hanging position and switch state
+						ledge_climb_side = -1
+						switch_to_state(STATE_LEDGE_HANG)
 				
 				if get_node("RightLedge").is_colliding():
 					#If there is a wall to your left
 					if !get_node("TopRightLedge").is_colliding():
+						print(get_node("RightLedge").get_collision_point())
 						#If it is low enough for you to grab
 						#if Input.is_action_pressed("jump"):
-							#Move to haning position and switch state
-							ledge_climb_side = 1
-							switch_to_state(STATE_LEDGE_HANG)
+						#Move to haning position and switch state
+						ledge_climb_side = 1
+						switch_to_state(STATE_LEDGE_HANG)
 			else:
 				ledge_reset_timer -= delta
 		
@@ -257,8 +263,12 @@ func _fixed_process(delta):
 			var direction = 0
 			if Input.is_action_pressed("move_right"):
 				direction += 1
+				if direction < 0:
+					get_node('Sprite').get_node('AnimationPlayer').play('turnRight')
 			if Input.is_action_pressed("move_left"):
 				direction -= 1
+				if direction > 0:
+					get_node('Sprite').get_node('AnimationPlayer').play('turnLeft')
 			velocity.x = lerp(velocity.x, direction*SPRINT_SPEED, LERP_INCREMENT-.12)
 			if direction == 0:
 				switch_to_state(STATE_STAND)
@@ -586,13 +596,17 @@ func switch_to_state(switch_to):
 	if switch_to == STATE_CROUCH:
 		get_node("Collision").set_shape(crouch_col)
 		get_node("Collision").set_pos(Vector2(0,24))
-		get_node("Sprite").set_texture(crouch_spr)
+		get_node("Sprite").get_node("AnimationPlayer").stop()
+		get_node("Sprite").set_frame(3)
 		get_node("Sprite").set_pos(Vector2(0,16))
 	elif switch_to == STATE_STAND:
 		if state == STATE_CROUCH:
 			get_node("Collision").set_shape(normal_col)
 			get_node("Collision").set_pos(Vector2(0,0))
-			get_node("Sprite").set_texture(normal_spr)
+			if isRight:
+				get_node("Sprite").set_frame(2)
+			else:
+				get_node('Sprite').set_frame(0)
 			get_node("Sprite").set_pos(Vector2(0,0))
 	elif switch_to == STATE_CLIMB:
 		velocity = Vector2(0,0)
@@ -626,10 +640,12 @@ func switch_to_state(switch_to):
 	state = switch_to
 
 func get_sprite_height():
-	return get_node("Sprite").get_texture().get_size().y
+	var frameDex = get_node("Sprite").get_frame()
+	return get_node("Sprite").get_sprite_frames().get_frame('default', frameDex).get_size().y
 
 func get_sprite_width():
-	return get_node("Sprite").get_texture().get_size().x
+	var frameDex = get_node("Sprite").get_frame()
+	return get_node("Sprite").get_sprite_frames().get_frame('default', frameDex).get_size().x
 	
 func take_damage(dam):
 	health -= dam

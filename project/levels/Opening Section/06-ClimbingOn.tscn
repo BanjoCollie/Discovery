@@ -18,6 +18,8 @@ extents = Vector2( 32, 192 )
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
 
+transform/pos = Vector2( -16, 16 )
+
 [node name="TileMap" type="TileMap" parent="."]
 
 mode = 0
