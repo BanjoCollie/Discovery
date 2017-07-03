@@ -1,12 +1,12 @@
 extends KinematicBody2D
 
 #Constants we might want to change
-const GRAVITY = 1800 #How fast gravity is
+const GRAVITY = 1600 #How fast gravity is
 const BASE_SPEED = 250 #Base speed of the player
 const CROUCH_SPEED = 125
 const AIM_SPEED = 125
 const SPRINT_SPEED = 500
-const JUMP_SPEED = 400 #Speed of jumps
+const JUMP_SPEED = 350 #Speed of jumps
 const JUMP_DELAY = 0.5 #Time between jumps
 const CLIMB_SPEED = 250 #Speed of climbing
 const LEDGE_CLIMB_SPEED = 1 #How many seconds it takes to climb up a ledge
@@ -19,6 +19,7 @@ const GUN_DAMAGE = 50
 const SLOPE_SLIDE_STOP = 35.0 #When you stop on inclines, high is more stop, low is less
 	#Dont set hight than 35
 const LERP_INCREMENT = .2 #Increase for slightly faster responce, but less predictable and smooth movement
+const AIR_LERP = .05 #Lerp increment for air movement
 
 #Constants we probably dont want to change
 const FLOOR_NORM = Vector2(0,-1)
@@ -96,8 +97,9 @@ var max_grapple_length = 500
 var normal_col
 var crouch_col
 
-#Used for animation
-var isRight = true 
+#Used for animation and directional stuff
+var isRight = true
+var directionChanged = false
 
 #Appearance
 var gun_pos
@@ -132,21 +134,30 @@ func _fixed_process(delta):
 		# Determine velocity
 		#Gravity
 		velocity.y += GRAVITY*delta
+		var direction = 0
+		
+		if Input.is_action_pressed("move_right"):
+			#print('isRight is: ' + str(isRight) + ', directionChanged is: ' + str(directionChanged))
+			direction += 1
+			if !isRight:
+				directionChanged = true
+				isRight = true
+		if Input.is_action_pressed("move_left"):
+			#print('isRight is: ' + str(isRight) + ', directionChanged is: ' + str(directionChanged))
+			direction -= 1
+			if isRight:
+				directionChanged = true
+				isRight = false
 		
 		#Check if you are on the ground
 		if is_move_and_slide_on_floor(): #May want to make falling be a different state
-			# Walk left and right
-			var direction = 0
-			if Input.is_action_pressed("move_right"):
-				direction += 1
-				if !isRight:
-					get_node('Sprite').get_node("AnimationPlayer").play("turnRight")
-					isRight = true
-			if Input.is_action_pressed("move_left"):
-				direction -= 1
-				if isRight:
-					get_node('Sprite').get_node("AnimationPlayer").play("turnLeft")
-					isRight = false
+			if directionChanged and isRight:
+				get_node('Sprite').get_node("AnimationPlayer").play("turnRight")
+				directionChanged = false
+			if directionChanged and !isRight:
+				get_node('Sprite').get_node("AnimationPlayer").play("turnLeft")
+				directionChanged = false
+				
 			velocity.x = lerp(velocity.x, direction*BASE_SPEED, LERP_INCREMENT)
 			
 			#Jumping
@@ -174,11 +185,14 @@ func _fixed_process(delta):
 				switch_to_state(STATE_ABILITY_SELECT)
 			
 		else: #Not on the ground
+			if abs(velocity.x) < BASE_SPEED:
+				velocity.x = lerp(velocity.x, direction*BASE_SPEED, AIR_LERP) #Michael trying out some air control code
+			print(velocity.x)
+			
 			if ledge_reset_timer <= 0:
 				if get_node("LeftLedge").is_colliding():
 					#If there is a wall to your left
 					if !get_node("TopLeftLedge").is_colliding():
-						print(get_node("LeftLedge").get_collision_point())
 						#If it is low enough for you to grab
 						#if Input.is_action_pressed("jump"):
 						#Move to hanging position and switch state
@@ -188,7 +202,6 @@ func _fixed_process(delta):
 				if get_node("RightLedge").is_colliding():
 					#If there is a wall to your left
 					if !get_node("TopRightLedge").is_colliding():
-						print(get_node("RightLedge").get_collision_point())
 						#If it is low enough for you to grab
 						#if Input.is_action_pressed("jump"):
 						#Move to haning position and switch state
@@ -208,7 +221,7 @@ func _fixed_process(delta):
 		#If you're on vines climb if you hit up or down
 		if onvines == true:
 			if Input.is_action_pressed("move_up") || Input.is_action_pressed("move_down"):
-				if abs(get_pos().x - myvine.get_pos().x) <= 16:
+				if abs(get_pos().x - myvine.get_pos().x) <= 24:
 					move_to(Vector2(myvine.get_pos().x,get_pos().y))
 					switch_to_state(STATE_CLIMB)
 		
