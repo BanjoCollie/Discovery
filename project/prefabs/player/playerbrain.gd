@@ -7,15 +7,16 @@ const CROUCH_SPEED = 125
 const AIM_SPEED = 125
 const SPRINT_SPEED = 500
 const JUMP_SPEED = 350 #Speed of jumps
-const JUMP_DELAY = 0.5 #Time between jumps
+const JUMP_DELAY = 0.3 #Time between jumps
 const CLIMB_SPEED = 250 #Speed of climbing
 const LEDGE_CLIMB_SPEED = 1 #How many seconds it takes to climb up a ledge
 const GUN_TRACER_TIME = 0.1 #How many seconds the gun's tracer is drawn
 const GUN_FIRE_DELAY = 1 #Length of time between gun shots
 const MAX_HEALTH = 100
 const GUN_DAMAGE = 50
+const FLASH_DELAY = 1 #Length of time between throwing FlashBombs
 
-#Both of these effect climbing inclines
+#Both of these affect climbing inclines
 const SLOPE_SLIDE_STOP = 35.0 #When you stop on inclines, high is more stop, low is less
 	#Dont set hight than 35
 const LERP_INCREMENT = .2 #Increase for slightly faster responce, but less predictable and smooth movement
@@ -36,6 +37,7 @@ const STATE_ABILITY_SELECT = 7
 const STATE_GUN_SELECT = 8
 const STATE_GRAPPLE_AIM = 9
 const STATE_GRAPPLING = 10
+const STATE_FLASH_AIM = 11
 
 onready var ground = get_node("/root/World/TileMap")
 
@@ -66,14 +68,18 @@ var shot_hit = Vector2(0,0) #Where your last shot hit
 var gun_fire_timer = 0
 var gun_tracer_timer = 0
 
+#Flash variables
+var flash_count = 10
+var flash_timer = 0
+
 #Abilities
 var selected_ability = null
 var active_abilities = { #Make sure this matches ability icons in ability wheel node
 	Grapple = true,
 	Platforms = false,
+	FlashBomb = true,
 	Temp1 = true,
-	Temp2 = true,
-	Temp3 = false,
+	Temp3 = true,
 	Temp4 = false,
 	Temp5 = true,
 	Temp6 = true,
@@ -83,7 +89,8 @@ var active_abilities = { #Make sure this matches ability icons in ability wheel 
 	Temp10 = false,
 }
 var ability_states = { #The state that each ability puts you into when you press the ability button
-	Grapple = STATE_GRAPPLE_AIM
+	Grapple = STATE_GRAPPLE_AIM,
+	FlashBomb = STATE_FLASH_AIM,
 }
 var grapple_attached = false
 var grapple_pos = Vector2(0,0)
@@ -117,8 +124,10 @@ func _ready():
 	crouch_col.set_height(0)
 	crouch_col.set_radius(23)
 	
+	#sets display of HUD elements
 	get_node("Info/Health").set_text("Health: " + str(health))
 	get_node("Info/Ammo").set_text("Ammo: " + str(ammo))
+	get_node('Info/Flash Bombs').set_text('Flash Bombs: ' + str(flash_count))
 	
 	gun_pos = Vector2(0,-get_sprite_height()/4)
 	
@@ -187,7 +196,7 @@ func _fixed_process(delta):
 		else: #Not on the ground
 			if abs(velocity.x) < BASE_SPEED:
 				velocity.x = lerp(velocity.x, direction*BASE_SPEED, AIR_LERP) #Michael trying out some air control code
-			print(velocity.x)
+			#print(velocity.x)
 			
 			if ledge_reset_timer <= 0:
 				if get_node("LeftLedge").is_colliding():
@@ -400,18 +409,19 @@ func _fixed_process(delta):
 	
 	
 	elif state == STATE_AIM:
-		#-24 is height of gun. Should probably be a varaible
 		aimvect = (get_global_mouse_pos()-Vector2(get_pos().x,get_pos().y) - gun_pos)
 		#aimdir = Vector2(0,-24).angle_to_point(get_global_mouse_pos()-Vector2(get_pos().x,get_pos().y))
 		# everything in if statement is used if player is using a controller
 		if Input.is_joy_known(0):
-			# commented out section below was for testing angles
-#			timeAiming += 1
-#			if (timeAiming%60 == 0):
-#				print("X pos of right stick is: " + String(Input.get_joy_axis(0,2)*180))
-#				print("Y pos of right stick is: " + String(Input.get_joy_axis(0,3)*180))
 			aimvect = (Vector2(Input.get_joy_axis(0,2)*180, Input.get_joy_axis(0,3)*180))
-			#aimdir= Vector2(0,-24).angle_to_point(Vector2(Input.get_joy_axis(0,2)*180, Input.get_joy_axis(0,3)*180))
+		print(Input.get_joy_axis(0,2))
+		#makes sure you're always facing the direction you're aiming
+		if isRight and aimvect.x < 0:
+			get_node('Sprite').get_node('AnimationPlayer').play('turnLeft')
+			isRight = false
+		if !isRight and aimvect.x > 0:
+			get_node('Sprite').get_node('AnimationPlayer').play('turnRight')
+			isRight = true
 		
 		#aimdir = deg2rad(round(aimang/45)*45)
 			#Free Aiming
@@ -436,9 +446,14 @@ func _fixed_process(delta):
 		if Input.is_action_just_released("aim") && gun_fire_timer<=0:
 			if aimvect.length() > 20:
 				if ammo > 0:
+					#Gunshot vibration. Feedback is always nice to have
+					if Input.is_joy_known(0):
+						Input.start_joy_vibration(0,1,.5,.1)
 					var space_state = get_world_2d().get_direct_space_state()
-					#var hit = space_state.intersect_ray( Vector2(0,-get_sprite_height()/4), Vector2(sin(aimdir)*10000,cos(aimdir)*10000) )
-					#var hit = space_state.intersect_ray( get_global_pos()+Vector2(0,-get_sprite_height()/4), get_global_pos()-Vector2(sin(aimdir)*10000,cos(aimdir)*10000), [ self ] )
+					#var hit = space_state.intersect_ray( Vector2(0,-get_sprite_height()/4),
+					 #Vector2(sin(aimdir)*10000,cos(aimdir)*10000) )
+					#var hit = space_state.intersect_ray( get_global_pos()+Vector2(0,-get_sprite_height()/4), 
+					 #get_global_pos()-Vector2(sin(aimdir)*10000,cos(aimdir)*10000), [ self ] )
 					var hit = space_state.intersect_ray( get_global_pos()+gun_pos, get_global_pos()+10000*aimvect, [ self ] )
 					if (!hit.empty()):
 						shot_hit = hit.position
@@ -518,6 +533,14 @@ func _fixed_process(delta):
 		if Input.is_joy_known(0):
 			aimvect = (Vector2(Input.get_joy_axis(0,2)*180, Input.get_joy_axis(0,3)*180))
 		
+		#Code to make sure you're always facing the direction you're aiming
+		if isRight and aimvect.x < 0:
+			get_node('Sprite').get_node('AnimationPlayer').play('turnLeft')
+			isRight = false
+		if !isRight and aimvect.x > 0:
+			get_node('Sprite').get_node('AnimationPlayer').play('turnRight')
+			isRight = true
+		
 		if Input.is_action_just_released("ability"):
 			if aimvect.length() > 10:
 				grapple_attached = false
@@ -527,6 +550,8 @@ func _fixed_process(delta):
 			else:
 				switch_to_state(STATE_STAND)
 		
+		#standard movement code necessary in all aiming states
+		#Might want to hide this in a variable somewhere, or something. Copy/paste less code
 		velocity.y += GRAVITY*delta
 		if is_move_and_slide_on_floor():
 			var direction = 0
@@ -552,6 +577,8 @@ func _fixed_process(delta):
 				grapple_pos = hit["position"]
 				grapple_attached = true
 			
+			#standard movement code necessary in all aiming states
+			#Might want to hide this in a variable somewhere, or something. Copy/paste less code
 			velocity.y += GRAVITY*delta
 			if is_move_and_slide_on_floor():
 				var direction = 0
@@ -561,6 +588,8 @@ func _fixed_process(delta):
 					direction -= 1
 				velocity.x = lerp(velocity.x, direction*AIM_SPEED, LERP_INCREMENT+.1)
 			velocity = move_and_slide(velocity,FLOOR_NORM,SLOPE_SLIDE_STOP)
+			
+			
 		else:
 			var old_pos = get_global_pos()
 			velocity += (grapple_pos-get_global_pos()).normalized()*grappling_speed
@@ -573,19 +602,70 @@ func _fixed_process(delta):
 			if get_global_pos().distance_to(grapple_pos) < min_grapple_length:
 				#Grapple has finished
 				switch_to_state(STATE_STAND)
-				#added by michael
+				#added by michael to reduce speed after ungrappling
 				velocity.y = .4*velocity.y
 				velocity.x = .4*velocity.x
 		
-	
+	#Used for when the player is trying to aim a flash bomb throw
+	elif state == STATE_FLASH_AIM:
+		#Same aim vector code as all other aiming states thus far
+		aimvect = (get_global_mouse_pos()-Vector2(get_pos().x,get_pos().y) - gun_pos)
+		if Input.is_joy_known(0):
+			aimvect = (Vector2(Input.get_joy_axis(0,2)*180, Input.get_joy_axis(0,3)*180))
+			
+		#Code to make sure you're always facing the direction you're aiming
+		if isRight and aimvect.x < 0:
+			get_node('Sprite').get_node('AnimationPlayer').play('turnLeft')
+			isRight = false
+		if !isRight and aimvect.x > 0:
+			get_node('Sprite').get_node('AnimationPlayer').play('turnRight')
+			isRight = true
+			
+		#Throw a flashbomb
+		if Input.is_action_just_released("ability") and flash_timer <= 0 and flash_count > 0:
+			#Add it to the world
+			var thrownFlash = preload("res://prefabs/player/FlashBomb.tscn")
+			thrownFlash = thrownFlash.instance()
+			get_parent().add_child(thrownFlash)
+			#Throw it to your left or right, depending on your aim
+			if isRight:
+				thrownFlash.set_global_pos(get_global_pos() + gun_pos + Vector2(20,0))
+			else:
+				thrownFlash.set_global_pos(get_global_pos() + gun_pos - Vector2(20,0))
+			thrownFlash.set_axis_velocity(aimvect*1.3)
+			thrownFlash.set_angular_velocity(aimvect.angle())
+			
+			#Set timer before youy can throw again, deplete ammo, update HUD
+			flash_timer = FLASH_DELAY
+			flash_count -= 1
+			get_node("Info/Flash Bombs").set_text("Flash Bombs: " + str(flash_count))
+			
+			
+		#standard movement code necessary in all aiming states
+		#Might want to hide this in a variable somewhere, or something. Copy/paste less code
+		velocity.y += GRAVITY*delta
+		if is_move_and_slide_on_floor():
+			var direction = 0
+			if Input.is_action_pressed("move_right"):
+				direction += 1
+			if Input.is_action_pressed("move_left"):
+				direction -= 1
+			velocity.x = lerp(velocity.x, direction*AIM_SPEED, LERP_INCREMENT+.1)
+		velocity = move_and_slide(velocity,FLOOR_NORM,SLOPE_SLIDE_STOP)
+		
+		if !Input.is_action_pressed("ability"):
+			switch_to_state(STATE_STAND)
 	
 	else:
 		print("Player is in state " + str(state) + " which hasn't been created")
 	
+	#Handle timing delays for shooting and flash-throwing
 	if gun_fire_timer > 0:
 			gun_fire_timer -= delta
 	if gun_tracer_timer > 0:
 		gun_tracer_timer -= delta
+	if flash_timer > 0:
+		flash_timer -= delta
 	jump_time += delta
 	update()
 
@@ -596,14 +676,18 @@ func _draw():
 	if gun_tracer_timer > 0:
 		draw_line(gun_pos,Vector2(shot_hit.x-get_global_pos().x,shot_hit.y-get_global_pos().y),Color(1.0, 1.0, 0.0),3)
 	
-	if state == STATE_AIM || state == STATE_GRAPPLE_AIM:
+	if state == STATE_AIM || state == STATE_GRAPPLE_AIM || state == STATE_FLASH_AIM:
+		#Not really sure how you got things to work so that the aiming vector only displays when you're
+		#able to shoot for the gun, so the enabled boolean is my workaround...lol - Michael
+		var enabled = true
+		if state == STATE_FLASH_AIM and flash_timer > 0:
+			enabled = false
 		#draw_line(Vector2(0,-24),Vector2(-160*sin(aimdir),-160*cos(aimdir)-24),Color(1.0, 0.0, 0.0),1)
-		if aimvect.length() > 10:
+		if aimvect.length() > 10 and enabled:
 			draw_line(gun_pos,160*(aimvect).normalized()+gun_pos,Color(1.0, 0.0, 0.0),1)
 	
 	elif state == STATE_GRAPPLING:
 		draw_line(gun_pos,grapple_pos-get_global_pos(),Color(1,1,1,1),3)
-		
 
 func switch_to_state(switch_to):
 	if switch_to == STATE_CROUCH:
@@ -612,6 +696,7 @@ func switch_to_state(switch_to):
 		get_node("Sprite").get_node("AnimationPlayer").stop()
 		get_node("Sprite").set_frame(3)
 		get_node("Sprite").set_pos(Vector2(0,16))
+		
 	elif switch_to == STATE_STAND:
 		if state == STATE_CROUCH:
 			get_node("Collision").set_shape(normal_col)
@@ -621,10 +706,13 @@ func switch_to_state(switch_to):
 			else:
 				get_node('Sprite').set_frame(0)
 			get_node("Sprite").set_pos(Vector2(0,0))
+			
 	elif switch_to == STATE_CLIMB:
 		velocity = Vector2(0,0)
+		
 	elif switch_to == STATE_CLIMB_TOP:
 		velocity.y = 0
+		
 	elif switch_to == STATE_LEDGE_HANG:
 		velocity = Vector2(0,0)
 		#Move to ledge (first move away, then up, then towards the ledge) (Moving away makes you not get caught below small ledges)

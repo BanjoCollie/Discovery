@@ -9,6 +9,7 @@ const CHASE_TIME = 10 #How many seconds will he chase you
 const PRE_ATTACK_TIME = 0.2 #How many seconds it takes to attack (Like a charge time)
 const POST_ATTACK_TIME = 0.5 #How many seconds it takes after an attack to move again (Like a cooldown time)
 const ATTACK_DAMAGE = 20
+const BEEP_DELAY = 7 #Number of seconds between beep noises
 
 #Inclines
 const SLOPE_SLIDE_STOP = 10.0 #When you stop on inclines, high is more stop, low is less
@@ -50,6 +51,8 @@ var attack_spr
 var yellow_scan
 var red_scan
 
+var sound_timer = 0
+
 func _ready():
 	set_fixed_process(true)
 	add_to_group("enemies")
@@ -68,6 +71,12 @@ func _fixed_process(delta):
 	
 	if state == STATE_PATROL:
 		#Check to see if you are touching the player
+		print(sound_timer)
+		if sound_timer >= BEEP_DELAY:
+			print('boutta beep!')
+			get_node("Sounds").play('RobotBeep')
+			sound_timer = 0
+			
 		for instance in get_node("Touch").get_overlapping_bodies():
 			if instance == player:
 				switch_to_state(STATE_CHASE)
@@ -140,6 +149,7 @@ func _fixed_process(delta):
 		get_node("Attack/CollisionShape2D").set_pos(-get_node("Attack/CollisionShape2D").get_pos())
 		
 		facing = direction
+	sound_timer += delta
 		
 	
 func switch_to_state(switch_to):
@@ -165,6 +175,12 @@ func take_damage(dam):
 	if state == STATE_PATROL:
 		switch_to_state(STATE_CHASE)
 		get_tree().call_group(0, "enemies", "chase_player")
+		
+#called every time the enemy is hit by a flash bomb
+#robots are unaffected by flash bombs
+func get_flashed():
+	print('Ancient Bot got flashed')
+	pass
 
 func chase_player():
 	switch_to_state(STATE_CHASE)

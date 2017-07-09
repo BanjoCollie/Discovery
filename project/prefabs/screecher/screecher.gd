@@ -13,6 +13,7 @@ const CHASE_TIME = 10 #How many seconds will he chase you
 const PRE_ATTACK_TIME = 0.1 #How many seconds it takes to attack (Like a charge time)
 const POST_ATTACK_TIME = 0.5 #How many seconds it takes after an attack to move again (Like a cooldown time)
 const ATTACK_DAMAGE = 50
+const STUN_DURATION = 3 #duration of stuns caused by FlashBomb, in seconds
 
 #Inclines
 const SLOPE_SLIDE_STOP = 35.0 #When you stop on inclines, high is more stop, low is less
@@ -26,6 +27,7 @@ const FLOOR_NORM = Vector2(0,-1)
 const STATE_CHASE = 0
 const STATE_PATROL = 1
 const STATE_ATTACK = 2
+const STATE_STUNNED = 3
 
 #Variables
 var state = STATE_PATROL
@@ -43,8 +45,10 @@ var screech_timer = 0
 var screeching = false
 
 var chase_timer = 0
-var leftbound = -999
-var rightbound = 999
+var stun_timer = 0 #how long Shrieker has been stunned\
+#The limits of the Shrieker's patrol. Assigned by node children of it
+var leftbound
+var rightbound
 
 var attack_timer = 0
 var has_attacked = false
@@ -70,6 +74,8 @@ func _ready():
 		get_node(rightLimit).queue_free()
 	else:
 		print("You messed up assigning the navigation nodes in the screecher")
+		leftbound = get_global_pos().x
+		rightbound = get_global_pos().x
 	
 	base_spr = preload("res://assets/textures/Enemies/Shrieker/shrieker.png")
 	screech_spr = preload("res://assets/textures/Enemies/Shrieker/shrieker_shriek.png")
@@ -156,6 +162,13 @@ func _fixed_process(delta):
 			else:
 				if attack_timer >= PRE_ATTACK_TIME+POST_ATTACK_TIME:
 					switch_to_state(STATE_CHASE)
+					
+	elif state == STATE_STUNNED:
+		stun_timer += delta
+		if stun_timer >= STUN_DURATION:
+			print('Shrieker got unstunned')
+			switch_to_state(last_state)
+			stun_timer = 0
 	
 	if direction != facing:
 		#If we turned around
@@ -180,11 +193,23 @@ func switch_to_state(switch_to):
 		has_attacked = false
 		screech.set_hidden(true)
 		get_node("Sprite").set_texture(base_spr)
-	
-	last_state = state
+		
+	elif state == STATE_STUNNED:
+		stun_timer = 0
+		
+	if state != STATE_STUNNED:
+		last_state = state
 	state = switch_to
 
 func take_damage(dam):
 	health -= dam
 	if state == STATE_PATROL:
 		switch_to_state(STATE_CHASE)
+		
+#called every time the enemy is hit by a flash bomb
+#organic creatures are stunned by flash bombs
+func get_flashed():
+	print('Shrieker got flashed')
+	switch_to_state(STATE_STUNNED)
+	
+	
