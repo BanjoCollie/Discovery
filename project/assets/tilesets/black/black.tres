@@ -1,18 +1,19 @@
-[gd_resource type="TileSet" load_steps=20 format=1]
+[gd_resource type="TileSet" load_steps=23 format=1]
 
 [ext_resource path="res://assets/tilesets/black/angle.png" type="Texture" id=1]
 [ext_resource path="res://assets/tilesets/black/halfangle.png" type="Texture" id=2]
 [ext_resource path="res://assets/tilesets/black/cracked.png" type="Texture" id=3]
 [ext_resource path="res://assets/tilesets/black/invisibleWall.png" type="Texture" id=4]
 [ext_resource path="res://assets/tilesets/black/scenery.png" type="Texture" id=5]
-[ext_resource path="res://assets/tilesets/black/halfsquare.png" type="Texture" id=6]
-[ext_resource path="res://assets/tilesets/black/raisedangle.png" type="Texture" id=7]
-[ext_resource path="res://assets/tilesets/black/square.png" type="Texture" id=8]
-[ext_resource path="res://assets/tilesets/black/vine.png" type="Texture" id=9]
-[ext_resource path="res://assets/tilesets/black/mapBoundary.png" type="Texture" id=10]
-[ext_resource path="res://assets/tilesets/black/secret.png" type="Texture" id=11]
-[ext_resource path="res://assets/tilesets/black/computer.png" type="Texture" id=12]
-[ext_resource path="res://assets/tilesets/black/exit.png" type="Texture" id=13]
+[ext_resource path="res://assets/tilesets/black/example.png" type="Texture" id=6]
+[ext_resource path="res://assets/tilesets/black/halfsquare.png" type="Texture" id=7]
+[ext_resource path="res://assets/tilesets/black/raisedangle.png" type="Texture" id=8]
+[ext_resource path="res://assets/tilesets/black/square.png" type="Texture" id=9]
+[ext_resource path="res://assets/tilesets/black/vine.png" type="Texture" id=10]
+[ext_resource path="res://assets/tilesets/black/mapBoundary.png" type="Texture" id=11]
+[ext_resource path="res://assets/tilesets/black/secret.png" type="Texture" id=12]
+[ext_resource path="res://assets/tilesets/black/computer.png" type="Texture" id=13]
+[ext_resource path="res://assets/tilesets/black/exit.png" type="Texture" id=14]
 
 [sub_resource type="ConvexPolygonShape2D" id=1]
 
@@ -24,20 +25,30 @@ points = Vector2Array( 32, -32, 32, 32, -32, 32 )
 custom_solver_bias = 0.0
 points = Vector2Array( 32, 0, 32, 32, -32, 32 )
 
-[sub_resource type="ConvexPolygonShape2D" id=3]
+[sub_resource type="ConvexPolygonShape2D" id=8]
 
 custom_solver_bias = 0.0
 points = Vector2Array( -32, -32, 32, -32, 32, 32, -32, 32 )
 
-[sub_resource type="ConvexPolygonShape2D" id=4]
+[sub_resource type="ConvexPolygonShape2D" id=7]
+
+custom_solver_bias = 0.0
+points = Vector2Array( -32, -32, 32, -32, 32, 32, -32, 32 )
+
+[sub_resource type="ConvexPolygonShape2D" id=3]
 
 custom_solver_bias = 0.0
 points = Vector2Array( 32, 32, -32, 32, -32, 0, 32, 0 )
 
-[sub_resource type="ConvexPolygonShape2D" id=5]
+[sub_resource type="ConvexPolygonShape2D" id=4]
 
 custom_solver_bias = 0.0
 points = Vector2Array( 32, -32, 32, 32, -32, 32, -32, 0 )
+
+[sub_resource type="ConvexPolygonShape2D" id=5]
+
+custom_solver_bias = 0.0
+points = Vector2Array( -32, -32, 32, -32, 32, 32, -32, 32 )
 
 [sub_resource type="ConvexPolygonShape2D" id=6]
 
@@ -63,31 +74,31 @@ points = Vector2Array( -32, -32, 32, -32, 32, 32, -32, 32 )
 1/shape_offset = Vector2( 32, 32 )
 1/shapes = [ SubResource( 2 ) ]
 2/name = "halfBlock"
-2/texture = ExtResource( 6 )
+2/texture = ExtResource( 7 )
 2/tex_offset = Vector2( 0, 0 )
 2/region = Rect2( 0, 0, 64, 64 )
 2/occluder_offset = Vector2( 32, 32 )
 2/navigation_offset = Vector2( 32, 32 )
 2/shape_offset = Vector2( 32, 32 )
-2/shapes = [ SubResource( 4 ) ]
+2/shapes = [ SubResource( 3 ) ]
 3/name = "longRamp2"
-3/texture = ExtResource( 7 )
+3/texture = ExtResource( 8 )
 3/tex_offset = Vector2( 0, 0 )
 3/region = Rect2( 0, 0, 64, 64 )
 3/occluder_offset = Vector2( 32, 32 )
 3/navigation_offset = Vector2( 32, 32 )
 3/shape_offset = Vector2( 32, 32 )
-3/shapes = [ SubResource( 5 ) ]
+3/shapes = [ SubResource( 4 ) ]
 4/name = "block"
-4/texture = ExtResource( 8 )
+4/texture = ExtResource( 9 )
 4/tex_offset = Vector2( 0, 0 )
 4/region = Rect2( 0, 0, 64, 64 )
 4/occluder_offset = Vector2( 32, 32 )
 4/navigation_offset = Vector2( 32, 32 )
 4/shape_offset = Vector2( 32, 32 )
-4/shapes = [ SubResource( 6 ) ]
+4/shapes = [ SubResource( 5 ) ]
 5/name = "vine"
-5/texture = ExtResource( 9 )
+5/texture = ExtResource( 10 )
 5/tex_offset = Vector2( 0, 0 )
 5/region = Rect2( 0, 0, 64, 64 )
 5/occluder_offset = Vector2( 32, 32 )
@@ -95,7 +106,7 @@ points = Vector2Array( -32, -32, 32, -32, 32, 32, -32, 32 )
 5/shape_offset = Vector2( 0, 0 )
 5/shapes = [  ]
 6/name = "mapBoundary"
-6/texture = ExtResource( 10 )
+6/texture = ExtResource( 11 )
 6/tex_offset = Vector2( 0, 0 )
 6/region = Rect2( 0, 0, 64, 64 )
 6/occluder_offset = Vector2( 32, 32 )
@@ -103,7 +114,7 @@ points = Vector2Array( -32, -32, 32, -32, 32, 32, -32, 32 )
 6/shape_offset = Vector2( 0, 0 )
 6/shapes = [  ]
 7/name = "secret"
-7/texture = ExtResource( 11 )
+7/texture = ExtResource( 12 )
 7/tex_offset = Vector2( 0, 0 )
 7/region = Rect2( 0, 0, 64, 64 )
 7/occluder_offset = Vector2( 32, 32 )
@@ -111,7 +122,7 @@ points = Vector2Array( -32, -32, 32, -32, 32, 32, -32, 32 )
 7/shape_offset = Vector2( 32, 32 )
 7/shapes = [ SubResource( 6 ) ]
 8/name = "computer"
-8/texture = ExtResource( 12 )
+8/texture = ExtResource( 13 )
 8/tex_offset = Vector2( 0, 0 )
 8/region = Rect2( 0, 0, 64, 64 )
 8/occluder_offset = Vector2( 32, 32 )
@@ -119,7 +130,7 @@ points = Vector2Array( -32, -32, 32, -32, 32, 32, -32, 32 )
 8/shape_offset = Vector2( 0, 0 )
 8/shapes = [  ]
 9/name = "exit"
-9/texture = ExtResource( 13 )
+9/texture = ExtResource( 14 )
 9/tex_offset = Vector2( 0, 0 )
 9/region = Rect2( 0, 0, 64, 64 )
 9/occluder_offset = Vector2( 32, 32 )
@@ -133,7 +144,7 @@ points = Vector2Array( -32, -32, 32, -32, 32, 32, -32, 32 )
 10/occluder_offset = Vector2( 32, 32 )
 10/navigation_offset = Vector2( 32, 32 )
 10/shape_offset = Vector2( 32, 32 )
-10/shapes = [ SubResource( 3 ) ]
+10/shapes = [ SubResource( 8 ) ]
 11/name = "invisibleWall"
 11/texture = ExtResource( 4 )
 11/tex_offset = Vector2( 0, 0 )
@@ -141,7 +152,7 @@ points = Vector2Array( -32, -32, 32, -32, 32, 32, -32, 32 )
 11/occluder_offset = Vector2( 32, 32 )
 11/navigation_offset = Vector2( 32, 32 )
 11/shape_offset = Vector2( 32, 32 )
-11/shapes = [ SubResource( 3 ) ]
+11/shapes = [ SubResource( 8 ) ]
 12/name = "scenery"
 12/texture = ExtResource( 5 )
 12/tex_offset = Vector2( 0, 0 )
@@ -150,4 +161,12 @@ points = Vector2Array( -32, -32, 32, -32, 32, 32, -32, 32 )
 12/navigation_offset = Vector2( 32, 32 )
 12/shape_offset = Vector2( 0, 0 )
 12/shapes = [  ]
+13/name = "Example"
+13/texture = ExtResource( 6 )
+13/tex_offset = Vector2( 0, 0 )
+13/region = Rect2( 0, 0, 64, 64 )
+13/occluder_offset = Vector2( 32, 32 )
+13/navigation_offset = Vector2( 32, 32 )
+13/shape_offset = Vector2( 32, 32 )
+13/shapes = [ SubResource( 7 ) ]
 
