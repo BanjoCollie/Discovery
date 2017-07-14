@@ -134,7 +134,7 @@ level = "Flatish.tscn"
 
 [node name="Door1" parent="." instance=ExtResource( 5 )]
 
-transform/pos = Vector2( 496, 448 )
+transform/pos = Vector2( 482, 450 )
 level = "Parkour.tscn"
 door_num = 1
 exit_door = 1
