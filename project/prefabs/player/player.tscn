@@ -1,11 +1,13 @@
-[gd_scene load_steps=12 format=1]
+[gd_scene load_steps=14 format=1]
 
 [ext_resource path="res://Prefabs/Player/playerbrain.gd" type="Script" id=1]
 [ext_resource path="res://assets/textures/Player/StandLeft.png" type="Texture" id=2]
 [ext_resource path="res://assets/textures/Player/Forward.png" type="Texture" id=3]
 [ext_resource path="res://assets/textures/Player/StandRight.png" type="Texture" id=4]
 [ext_resource path="res://assets/textures/Player/player_crouch.png" type="Texture" id=5]
-[ext_resource path="res://prefabs/player/ability_wheel.gd" type="Script" id=6]
+[ext_resource path="res://assets/textures/Player/colliders/48px_vertical_real.png" type="Texture" id=6]
+[ext_resource path="res://assets/textures/Player/colliders/48px_vertical.png" type="Texture" id=7]
+[ext_resource path="res://prefabs/player/ability_wheel.gd" type="Script" id=8]
 
 [sub_resource type="CapsuleShape2D" id=1]
 
@@ -132,34 +134,54 @@ _update_shape_index = 0
 
 [node name="LeftLedge" type="RayCast2D" parent="."]
 
-transform/pos = Vector2( -24, -80 )
+transform/pos = Vector2( -24, -78 )
 enabled = true
 exclude_parent = true
 cast_to = Vector2( 0, 48 )
 layer_mask = 4
 type_mask = 15
+
+[node name="Sprite" type="Sprite" parent="LeftLedge"]
+
+visibility/visible = false
+transform/pos = Vector2( 0, 25.2433 )
+transform/scale = Vector2( 1, 1.05181 )
+texture = ExtResource( 6 )
 
 [node name="RightLedge" type="RayCast2D" parent="."]
 
-transform/pos = Vector2( 24, -80 )
+transform/pos = Vector2( 24, -78 )
 enabled = true
 exclude_parent = true
 cast_to = Vector2( 0, 48 )
 layer_mask = 4
 type_mask = 15
 
+[node name="Sprite" type="Sprite" parent="RightLedge"]
+
+visibility/visible = false
+transform/pos = Vector2( 0, 25.4357 )
+transform/scale = Vector2( 1, 1.05982 )
+texture = ExtResource( 6 )
+
 [node name="TopRightLedge" type="RayCast2D" parent="."]
 
-transform/pos = Vector2( 0, -80 )
+transform/pos = Vector2( 0, -79 )
 enabled = true
 exclude_parent = false
 cast_to = Vector2( 74, 0 )
 layer_mask = 4
 type_mask = 15
 
+[node name="Sprite" type="Sprite" parent="TopRightLedge"]
+
+visibility/visible = false
+transform/scale = Vector2( 3.2, 1 )
+texture = ExtResource( 7 )
+
 [node name="TopLeftLedge" type="RayCast2D" parent="."]
 
-transform/pos = Vector2( 0, -80 )
+transform/pos = Vector2( 0, -79 )
 enabled = true
 exclude_parent = true
 cast_to = Vector2( -74, 0 )
@@ -241,6 +263,6 @@ margin/left = 32.0
 margin/top = 32.0
 margin/right = -8.0
 margin/bottom = -8.0
-script/script = ExtResource( 6 )
+script/script = ExtResource( 8 )
 
 

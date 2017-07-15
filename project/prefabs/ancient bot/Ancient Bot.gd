@@ -71,7 +71,6 @@ func _fixed_process(delta):
 	
 	if state == STATE_PATROL:
 		#Check to see if you are touching the player
-		print(sound_timer)
 		if sound_timer >= BEEP_DELAY:
 			print('boutta beep!')
 			get_node("Sounds").play('RobotBeep')

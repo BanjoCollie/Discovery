@@ -133,6 +133,7 @@ func _ready():
 	
 
 func _fixed_process(delta):
+	#print(get_pos())
 	if (health <= 0):
 		#If you die
 		if dead == false:
@@ -202,6 +203,8 @@ func _fixed_process(delta):
 				if get_node("LeftLedge").is_colliding():
 					#If there is a wall to your left
 					if !get_node("TopLeftLedge").is_colliding():
+						#print(get_node("LeftLedge").get_collider())
+						#print("here is metadata for collider: " + str(get_collider_metadata()))
 						#If it is low enough for you to grab
 						#if Input.is_action_pressed("jump"):
 						#Move to hanging position and switch state
@@ -211,6 +214,7 @@ func _fixed_process(delta):
 				if get_node("RightLedge").is_colliding():
 					#If there is a wall to your left
 					if !get_node("TopRightLedge").is_colliding():
+						#print(get_node("RightLedge").get_collider())
 						#If it is low enough for you to grab
 						#if Input.is_action_pressed("jump"):
 						#Move to haning position and switch state
@@ -414,7 +418,7 @@ func _fixed_process(delta):
 		# everything in if statement is used if player is using a controller
 		if Input.is_joy_known(0):
 			aimvect = (Vector2(Input.get_joy_axis(0,2)*180, Input.get_joy_axis(0,3)*180))
-		print(Input.get_joy_axis(0,2))
+		#print(Input.get_joy_axis(0,2))
 		#makes sure you're always facing the direction you're aiming
 		if isRight and aimvect.x < 0:
 			get_node('Sprite').get_node('AnimationPlayer').play('turnLeft')
@@ -714,16 +718,18 @@ func switch_to_state(switch_to):
 		velocity.y = 0
 		
 	elif switch_to == STATE_LEDGE_HANG:
+		#print("ledge climb side is: " + str(ledge_climb_side))
 		velocity = Vector2(0,0)
 		#Move to ledge (first move away, then up, then towards the ledge) (Moving away makes you not get caught below small ledges)
+		#The final adjustment X-values need to change if the sprite's width ever does! Remember this!
 		if ledge_climb_side == -1:
 			move_to(Vector2(get_pos().x+64,get_pos().y))
 			move_to(Vector2(get_pos().x,get_node("LeftLedge").get_collision_point().y+get_sprite_height()/2))
-			move_to(Vector2(get_pos().x-128,get_pos().y))
+			move_to(Vector2(get_pos().x-76,get_pos().y))
 		elif ledge_climb_side == 1:
 			move_to(Vector2(get_pos().x-64,get_pos().y))
 			move_to(Vector2(get_pos().x,get_node("RightLedge").get_collision_point().y+get_sprite_height()/2))
-			move_to(Vector2(get_pos().x+128,get_pos().y))
+			move_to(Vector2(get_pos().x+76,get_pos().y))
 		else:
 			print("Error in switch to state: ledge climb")
 	elif switch_to == STATE_AIM:
